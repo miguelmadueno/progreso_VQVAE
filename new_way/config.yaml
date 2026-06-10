@@ -18,7 +18,7 @@ file_paths:
 # Global settings for the project
 settings:
   random_state: 42
-  metric_length: 10
+  metric_length: 250
 
 
 # List of all columns in the order they appear in the dataset
@@ -27,6 +27,7 @@ columns:
   - name: "user"
     is_complete: true
     is_uninformative: true
+    is_splitted: false
     type: null
     text: "User"
     clip_min: null
@@ -35,6 +36,7 @@ columns:
   - name: "date_time"
     is_complete: true
     is_uninformative: true
+    is_splitted: false
     type: null
     text: "Date Time"
     clip_min: null
@@ -43,6 +45,7 @@ columns:
   - name: "service"
     is_complete: true
     is_uninformative: true
+    is_splitted: false
     type: null
     text: "Service"
     clip_min: null
@@ -54,6 +57,7 @@ columns:
     type: "continuous_real"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Sleep Start"
     clip_min: -22500
     clip_max: 25000
@@ -90,6 +94,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Location Distance"
     clip_min: 20
     clip_max: 95000
@@ -115,6 +120,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Location Time Home"
     clip_min: 120
     clip_max: 86400
@@ -141,6 +147,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Sleep Duration"
     clip_min: 3600
     clip_max: 54000
@@ -166,6 +173,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Activity Walking"
     clip_min: 120
     clip_max: 15000
@@ -191,6 +199,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "App Usage Total"
     clip_min: 180
     clip_max: 35000
@@ -216,6 +225,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Location Clusters Count"
     clip_min: 1
     clip_max: 15
@@ -241,6 +251,7 @@ columns:
     type: "continuous_positive"
     is_complete: false
     is_uninformative: false
+    is_splitted: false
     text: "Steps Total"
     clip_min: 150
     clip_max: 25000
@@ -276,6 +287,7 @@ columns:
     type: "binary"
     is_complete: true
     is_uninformative: false
+    is_splitted: false
     text: "Weekend"
     clip_min: null
     clip_max: null
@@ -306,6 +318,7 @@ columns:
     type: "binary"
     is_complete: true
     is_uninformative: false
+    is_splitted: false
     text: "Practiced Sport"
     clip_min: null
     clip_max: null
@@ -330,7 +343,60 @@ columns:
             value: "max"
             multiplier: 0.9
 
+  # IDX 10 - 57
+  - name: "steps"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    is_splitted: true
+    number_splits: 48 
+    text: "Steps"
+    clip_min: 0
+    clip_max: 25000
 
+  # IDX 58 - 105
+  - name: "activity"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    is_splitted: true
+    number_splits: 48
+    text: "Activity"
+    clip_min: 0
+    clip_max: 25000
+  
+    # IDX 106 - 153
+  - name: "time_slots"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    is_splitted: true
+    number_splits: 48
+    text: "App Usage"
+    clip_min: 0
+    clip_max: 25000
+  
+    # IDX 154 - 201
+  - name: "at_home_raw"
+    type: "binary"
+    is_complete: false
+    is_uninformative: false
+    is_splitted: true
+    number_splits: 48
+    text: "At Home"
+    clip_min: 0
+    clip_max: 25000
+
+    # IDX 202 - 249
+  - name: "at_work_raw"
+    type: "binary"
+    is_complete: false
+    is_uninformative: false
+    is_splitted: true
+    number_splits: 48
+    text: "At Work"
+    clip_min: 0
+    clip_max: 25000
 
 services:
   # Mapping from service codes to marker shapes for visualization

@@ -10,14 +10,16 @@ import os
 from vqvae_a import VQVAE
 
 
-import api_constants as c 
+import api_constants as c
 import api_utils
-import api_data_processing 
+import api_data_processing
 
 from sklearn.preprocessing import RobustScaler
 from torch.utils.data import Dataset, DataLoader
 import copy
 from torchvision import transforms
+from collections import Counter
+import pdb
 
 import datetime
 from pathlib import Path
@@ -33,6 +35,67 @@ from pydantic import BaseModel, Field
 from typing import Tuple, Literal, Union
 
 
+#################################################################
+########################    CONFIG    ########################
+#################################################################
+
+class VQVAEConfig(BaseModel):
+    # General
+    mode: str = "a0"
+    checkpoint_path: str = "checkpoints"
+    num_runs: int = 1
+
+    # Data handling
+    min_scale: Union[int, float] = 1 - 1e-10
+    max_scale: Union[int, float] = 1
+    window_length: int = 128
+    max_size: int = 1024
+    device: str = "cuda"
+    slice_length: int = 128
+    split_threshold: int = 1
+
+    # Compute
+    gpu_id: int = 0
+    train_batch_size: int = 64
+    val_batch_size: int = 64
+    test_batch_size: int = 64
+    num_workers: int = 4
+    test_num_workers: int = 0
+
+    # Model
+    conv_dims: Tuple[int, ...] = (16, 64, 128)
+    conv_kernel_sizes: Tuple[int, ...] = (4, 4, 4, 4)
+    conv_strides: Tuple[int, ...] = (1, 1, 1, 1)
+
+    deconv_dims: Union[None, Tuple[int, ...]] = None
+    deconv_kernel_sizes: Union[None, Tuple[int, ...]] = None
+    deconv_strides: Union[None, Tuple[int, ...]] = None
+    
+    embed_dim: int = 80
+    num_embed: int = 256
+    num_layers: int = 4
+    dropout: float = 0.5
+    decay: float = 0.99
+    threshold: float = 0.1
+
+    # Training split
+    train_percentage: float = 0.7
+    valid_percentage: float = 0.15
+
+    # Training
+    num_epochs_vqvae: int = 1
+    step_size_vqvae: int = 150
+    gamma_vqvae: Union[int, float] = 1
+    lr_vqvae: float = 1e-3
+    latent_weight_vqvae: float = 0.25
+
+    # Missingness
+    missingness_mode: Literal["MCAR", "MAR", "MNAR"] = "MCAR"
+    missing_rate: float = 0.1
+
+    # Flags
+    selected_test: bool = False
+
 
 #################################################################
 ########################    INFERENCE    ########################
@@ -45,7 +108,7 @@ class vqvae_inference():
         The vqvae_inference class recieves a pretrained model and is in charge of running a dataset through the encoder in order to obtain the embeddings representations (profiles).
     """
 
-    def __init__(self, model_route: str, device: str = "cpu"):
+    def __init__(self, model_route: str, hyperparameters: dict, device: str = "cpu",):
 
         """
         Loads the model
@@ -74,17 +137,27 @@ class vqvae_inference():
         map_location = torch.device(self.device) if self.device else torch.device('cpu')
         self.vqvae_pt = torch.load(self.model_route, map_location=map_location)
 
-        self.model = VQVAE(num_features=10,
-                                    embed_dim=80,
-                                    num_embed=256,
-                                    num_layers=4,
-                                    conv_dims=(16, 64, 128),
-                                    kernel_sizes=(4, 4, 4, 4),
-                                    strides=(1, 1, 1, 1),
-                                    p=0.5,
-                                    decay=0.99,
-                                    threshold=0.1,
-                                    mask_flag = mask_flag
+        self.args = VQVAEConfig(**(hyperparameters or {}))
+
+        self.model = VQVAE(
+                            num_features= len(c.FEATURES_TO_INDEX),
+                            embed_dim=self.args.embed_dim,
+                            num_embed=self.args.num_embed,
+                            
+                            num_layers=self.args.num_layers,
+                            conv_dims=self.args.conv_dims,
+                            conv_kernel_sizes=self.args.conv_kernel_sizes,
+                            conv_strides=self.args.conv_strides,
+
+                            deconv_dims=self.args.deconv_dims,
+                            deconv_kernel_sizes=self.args.deconv_kernel_sizes,
+                            deconv_strides=self.args.deconv_strides,
+
+                            p=self.args.dropout,
+                            decay=self.args.decay,
+                            threshold=self.args.threshold,                
+                            
+                            mask_flag = mask_flag
             )
         
         self.model.load_state_dict(self.vqvae_pt)
@@ -132,7 +205,7 @@ class vqvae_inference():
 
         data_loader = DataLoader(
                         dataset,
-                        batch_size=512,
+                        batch_size=64,
                         shuffle=False,
                         collate_fn= api_utils.custom_collate_fn,
             )
@@ -140,14 +213,15 @@ class vqvae_inference():
         all_records = []
         max_length = 0
 
+        self.model.eval()
+        
         with torch.no_grad():
             for data_sample in data_loader:
                 # Load batch
                 inputs = data_sample['input']['signal_imp'].to(self.device).float()
                 masks = data_sample['input']['mask_signal'].to(self.device).float()
                 lengths = data_sample['lengths'].cpu().numpy()
-                #users = data_sample['users'].cpu().numpy() # COMENTADO
-                users = data_sample['users'] # AÑADIDO
+                users = data_sample['users'].cpu().numpy()
                 dates = data_sample['dates']
 
                 # Update max sequence length seen so far
@@ -170,8 +244,7 @@ class vqvae_inference():
                 # Collect records per user
                 for i, (user, length, patient_dates) in enumerate(zip(users, lengths, dates)):
                     record = {
-                        # "user": int(user), # COMENTADO
-                        "user": str(user), # AÑADIDO
+                        "user": int(user),
                         "dates": patient_dates,  # store list of dates directly
                         "indices": indices[i, :length].cpu().numpy(),  # already numpy
                     }
@@ -182,7 +255,8 @@ class vqvae_inference():
         # Group by user and concatenate all index arrays
         df_grouped = (
             df.groupby("user", as_index=False)
-            .agg({"indices": lambda arrs: np.concatenate(arrs.tolist())})
+            .agg({"indices": lambda arrs: np.concatenate(arrs.tolist()),
+                  "dates": lambda arrs: np.concatenate(arrs.tolist())})
         )
 
         # Extract model name (without extension)
@@ -211,62 +285,209 @@ class vqvae_inference():
 
         return df_grouped
 
+    def forward_cpd(self, data_path: str,results_folder_path:str):
+
+        """
+        Handles the data
+        """
+        
+        self.model.to(self.device)
+
+        # Fisrt we expand the paths
+        data_path = os.path.expanduser(data_path)
+        results_folder_path = os.path.expanduser(results_folder_path)
+
+        # First the function will check that all of the paths exists and the datatypes are correct
+        
+        if not os.path.isfile(data_path):
+            raise FileNotFoundError(f"Error: The data file {data_path} does not exist")
+        
+        if not os.path.isdir(results_folder_path):
+            raise FileNotFoundError(f"Error: The folder to store the results {results_folder_path} does not exist")
+
+        # After checking the paths we start by loading the data
+        
+        # Data
+        dataset = pd.read_csv(data_path)
+        print("Data successfully loaded")
+
+        data_transforms = transforms.Compose([api_data_processing.RandomPass(),api_data_processing.Tensor()])
+
+        dataset = api_data_processing.inference_DailyPatientSummaryDataset(data_object = dataset,
+                                                    clip_info=c.CLIP_INFO,
+                                                    needed_columns=c.COLS,
+                                                    complete = c.COMPLETE,
+                                                    continuous_positive_cols= c.CONTINUOUS_POSITIVE_COLS,
+                                                    continuous_real_valued_cols=c.CONTINUOUS_REAL_VALUED_COLS,
+                                                    transform=data_transforms,
+                                                    uninformative=c.UNINFORMATIVE)
+
+        # Once we have our dataset preprocesed we obtain the DataLoader to feed the model
+
+        data_loader = DataLoader(
+                        dataset,
+                        batch_size=512,
+                        shuffle=False,
+                        collate_fn= api_utils.custom_collate_fn,
+            )
+        
+
+        embedding_dict = {
+            embed_id: self.model.quantizer.embed[:,embed_id].detach().cpu().numpy()
+            for embed_id in range(self.model.quantizer.num_embed)
+        }
+
+        all_original_signals = []
+        all_masks = []
+        all_lengths = []
+        all_users = []
+        all_dates = []
+        all_some_observed = []
+        all_reconstructions = []
+
+        top_n_range = range(5,31,5)
+
+        embedding_counts = {
+            top_n:{} for top_n in top_n_range
+        }
+
+        max_length = 0
+
+        for test_samples in data_loader:
+            lengths = test_samples["lengths"].detach().cpu().numpy()
+            max_length = max(max_length, max(lengths))
+
+        for test_samples in data_loader:
+
+            inputs = test_samples["input"]["signal_imp"].to(self.device).float()
+            labels = test_samples["input"]["signal"].to(self.device).float()
+            masks =  test_samples["input"]["mask_signal"].to(self.device).float()
+            lengths = test_samples["lengths"].detach().cpu().numpy()
+            users = test_samples["users"].detach().cpu().numpy()
+            dates = test_samples["dates"]
+            some_observed = test_samples["some_observed"]
+
+            # Pad sequence to the maximum length
+            inputs_padded =  torch.nn.functional.pad(inputs, (0, max_length - inputs.size(2)))
+            labels_padded =  torch.nn.functional.pad(labels, (0, max_length - labels.size(2)))
+            masks_padded = torch.nn.functional.pad(masks, (0, max_length - masks.size(2)))
+
+            masks_ = masks_padded.clone()
+            masks_[masks_padded == 2] = 0
+            inputs_padded[(masks_padded == 0) | (masks_padded == 2)] = 0
+
+            self.model.eval()
+            with torch.no_grad():
+                
+                reconstructions_signal, _ , indices, embedding_info = self.model(inputs_padded, masks_, return_info= True)
+                all_reconstructions.append(reconstructions_signal.cpu().numpy())
+
+                embedding_info = api_utils.obtain_legacy_embed_info(embedding_info)
+
+                for i, user in enumerate(users):
+
+                    user_id = int(user)
+                    original_length = lengths[i]
+                    original_indices = indices[i, :original_length].cpu().numpy()
+
+                    patient_dates = dates[i]
+                    patient_some_observed = some_observed[i]
+
+                    original_embed_info = embedding_info[i, :original_length]
+
+                    for n in top_n_range:
+
+                        most_common = Counter(original_indices.flatten()).most_common(n)
+                        most_common_indices = {index for index, count in most_common}
+                        padded_indices = indices[i].cpu().numpy()
+                        mapped_indices = np.where(
+                            np.isin(
+                                padded_indices, list(most_common_indices)),
+                                padded_indices, -1
+                            )
+
+                        top_n_embed_info = np.empty(
+                            original_length,
+                            dtype=original_embed_info.dtype
+                        )
+                        
+                        for l in range(original_length):
+                            try:
+                                matches_top_embeds = np.isin(
+                                    original_embed_info[l]["embed_id"],
+                                    np.array(list(most_common_indices))      
+                                                             )
+                                top_n_embed = original_embed_info[l][matches_top_embeds]
+                                out_top_n_embed = original_embed_info[l][~matches_top_embeds]
+
+                                nearest_non_top_n = out_top_n_embed[np.argmin(out_top_n_embed["eu_dist"])]
+
+                                dummy_embed = np.empty(1, dtype=original_embed_info[l].dtype)
+
+                                dummy_embed['rank'] = nearest_non_top_n['rank']
+                                dummy_embed['embed_id'] = -1
+                                dummy_embed['eu_dist'] = \
+                                    np.mean(original_embed_info[l]['eu_dist'][~matches_top_embeds])
+                                
+                                dummy_embed['pseudo_probs'] = \
+                                    1.0 - np.sum(top_n_embed['pseudo_probs'])
+                            
+                                top_n_embed_info[l] = np.concatenate((top_n_embed, dummy_embed))
+                            except:
+                                pdb.set_trace
+                                raise
+
+                        embedding_counts[n][user_id] = \
+                            (
+                                original_length, padded_indices, mapped_indices, patient_dates,
+                                patient_some_observed, original_embed_info,
+                                top_n_embed_info
+                            )
+
+
+
+            # Collect original signals, masks, lengths, user IDs, dates, and observed indicators
+            all_original_signals.append(labels_padded.cpu().numpy())
+            all_masks.append(masks_padded.cpu().numpy())
+            all_lengths.extend(lengths)
+            all_users.extend(users)
+            all_dates.extend(dates)
+            all_some_observed.extend(some_observed)
+
+            print(all_users)
+
+        if all_reconstructions:  # Ensure the list is not empty
+            all_reconstructions = np.concatenate(all_reconstructions, axis=0)
+        else:
+            all_reconstructions = np.array([])
+
+        # Extract model name (without extension)
+        model_name = os.path.splitext(os.path.basename(self.model_route))[0]
+
+        # Extract dataset name (without extension)
+        data_name = os.path.splitext(os.path.basename(data_path))[0]
+
+        # Create timestamp
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Build output folder path
+        output_folder = os.path.join(
+            results_folder_path, f"{model_name}_{data_name}_{timestamp}"
+        )
+
+        # Create directory
+        os.makedirs(output_folder, exist_ok=True)
+
+        # Save dataset as pickle
+        output_file = os.path.join(output_folder, f"{data_name}_profiles_per_sample.pkl")
+        with open(output_file, "wb") as f:
+            pickle.dump(embedding_counts, f)
+
+
 
 #################################################################
 ########################    TRAINING     ########################
 #################################################################
-
-class VQVAEConfig(BaseModel):
-    # General
-    mode: str = "a0"
-    checkpoint_path: str = "checkpoints"
-    num_runs: int = 1
-
-    # Data handling
-    min_scale: Union[int, float] = 1 - 1e-10
-    max_scale: Union[int, float] = 1
-    window_length: int = 128
-    max_size: int = 1024
-    device: str = "cuda"
-    slice_length: int = 128
-    split_threshold: int = 1
-
-    # Compute
-    gpu_id: int = 0
-    train_batch_size: int = 64
-    val_batch_size: int = 64
-    test_batch_size: int = 64
-    num_workers: int = 4
-    test_num_workers: int = 0
-
-    # Model
-    conv_dims: Tuple[int, ...] = (16, 64, 128)
-    kernel_sizes: Tuple[int, ...] = (4, 4, 4, 4)
-    strides: Tuple[int, ...] = (1, 1, 1, 1)
-    num_embed: int = 256
-    num_layers: int = 4
-    dropout: float = 0.5
-    decay: float = 0.99
-    threshold: float = 0.1
-
-    # Training split
-    train_percentage: float = 0.7
-    valid_percentage: float = 0.15
-
-    # Training
-    num_epochs_vqvae: int = 1
-    step_size_vqvae: int = 150
-    gamma_vqvae: Union[int, float] = 1
-    lr_vqvae: float = 1e-3
-    latent_weight_vqvae: float = 0.25
-
-    # Missingness
-    missingness_mode: Literal["MCAR", "MAR", "MNAR"] = "MCAR"
-    missing_rate: float = 0.1
-
-    # Flags
-    selected_test: bool = False
-
 
 # GESTIONAR LOGICA DE FINE - TUNING O ENTRENADO DESDE 0
 
@@ -330,9 +551,16 @@ def vqvae_training(model_route:str,data_route:str,hyperparameters:dict ,):
     test_batch_size = args.test_batch_size
     num_workers = args.num_workers
     test_num_workers = args.test_num_workers
+
     conv_dims = args.conv_dims
-    kernel_sizes = args.kernel_sizes
-    strides = args.strides
+    conv_kernel_sizes = args.conv_kernel_sizes
+    conv_strides = args.conv_strides
+    
+    deconv_dims = args.deconv_dims
+    deconv_kernel_sizes = args.deconv_kernel_sizes
+    deconv_strides = args.deconv_strides
+
+    embed_dim = args.embed_dim
     num_embed = args.num_embed
     num_layers = args.num_layers
     dropout = args.dropout
@@ -378,22 +606,17 @@ def vqvae_training(model_route:str,data_route:str,hyperparameters:dict ,):
                                                                 model_route= model_route)
     
     # Start the training process
-    #torch.cuda.set_device(gpu_id) #COMENTADO
-    device='cpu' #AÑADIDO
-
+    torch.cuda.set_device(gpu_id)
     model_name = f"{mode}_{int(time.time())}"
     print(f"Model set to train on GPU: {gpu_id} for model: {model_name} started. Preparing data loaders.")
 
     # Determine the mask flag and embedding dimension based on model name suffix
     if "a0" == mode:
         mask_flag = 0
-        embed_dim = 80
     elif "a1" == mode:
         mask_flag = 1
-        embed_dim = 80
     elif "a2" == mode:
         mask_flag = 2
-        embed_dim = 80
     else:
         # Log an error and raise an exception if the model name suffix is invalid
         logging.error(f"Invalid model name {model_name}. Expected suffix 0, 1, or 2.")
@@ -431,10 +654,16 @@ def vqvae_training(model_route:str,data_route:str,hyperparameters:dict ,):
             num_features=num_features,
             embed_dim=embed_dim,
             num_embed=num_embed,
+            
             num_layers=num_layers,
             conv_dims=conv_dims,
-            kernel_sizes=kernel_sizes,
-            strides=strides,
+            conv_kernel_sizes=conv_kernel_sizes,
+            conv_strides=conv_strides,
+
+            deconv_dims=deconv_dims,
+            deconv_kernel_sizes=deconv_kernel_sizes,
+            deconv_strides=deconv_strides,
+
             p=dropout,
             decay=decay,
             threshold=threshold,
