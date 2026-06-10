@@ -1,0 +1,414 @@
+# Paths Configuration
+file_paths:
+  entire_original_data_path: "./2024_03_eB2_completa-20240320T175104Z-001/2024_03_eB2_completa/daily_summary_eb2.csv"
+  train_original_data_path: "./daily_summary_train.csv"
+  val_original_data_path: "./daily_summary_val.csv"
+  test_original_data_path: "./daily_summary_test.csv"
+  entire_filtered_data_path: "./daily_summary_filtered.csv"
+  train_filtered_data_path: "./daily_summary_train_filtered.csv"
+  val_filtered_data_path: "./daily_summary_val_filtered.csv"
+  test_filtered_data_path: "./daily_summary_test_filtered.csv"
+
+
+# ==============================
+# Column Definitions
+# This file is the single source of truth for all data columns.
+# ==============================
+
+# Global settings for the project
+settings:
+  random_state: 42
+  metric_length: 10
+
+
+# List of all columns in the order they appear in the dataset
+columns:
+  # --- Uninformative columns ---
+  - name: "user"
+    is_complete: true
+    is_uninformative: true
+    type: null
+    text: "User"
+    clip_min: null
+    clip_max: null
+
+  - name: "date_time"
+    is_complete: true
+    is_uninformative: true
+    type: null
+    text: "Date Time"
+    clip_min: null
+    clip_max: null
+
+  - name: "service"
+    is_complete: true
+    is_uninformative: true
+    type: null
+    text: "Service"
+    clip_min: null
+    clip_max: null
+
+  # --- Feature columns ---
+  # IDX 0
+  - name: "sleep_start"
+    type: "continuous_real"
+    is_complete: false
+    is_uninformative: false
+    text: "Sleep Start"
+    clip_min: -22500
+    clip_max: 25000
+    mar_config:
+      conditions:
+        - column: "sleep_start"
+          operator: "or"
+          sub_conditions:
+            - operator: "<"
+              value: "min"
+              multiplier: 1.1
+            - operator: ">"
+              value: "max"
+              multiplier: 1.1
+        - column: "activity_walking"
+          operator: "<"
+          value: "min"
+          multiplier: 1.1
+      
+    mnar_config:
+      conditions:
+        - column: "sleep_start"
+          operator: "or"
+          sub_conditions:
+            - operator: "<"
+              value: "min"
+              multiplier: 1.1
+            - operator: ">"
+              value: "max"
+              multiplier: 1.1
+
+  # IDX 1
+  - name: "location_distance"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Location Distance"
+    clip_min: 20
+    clip_max: 95000
+    mar_config:
+      conditions:
+        - column: "location_distance"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+        - column: "location_time_home"
+          operator: ">"
+          value: "min"
+          multiplier: 1.05
+    mnar_config:
+      conditions:
+        - column: "location_distance"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+
+  # IDX 2
+  - name: "location_time_home"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Location Time Home"
+    clip_min: 120
+    clip_max: 86400
+    mar_config:
+      conditions:
+        - column: "location_time_home"
+          operator: "<"
+          value: "min"
+          multiplier: 0.75
+        - column: "app_usage_total"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+    mnar_config:
+      conditions:
+        - column: "location_time_home"
+          operator: "<"
+          value: "min"
+          multiplier: 0.75
+
+
+  # IDX 3
+  - name: "sleep_duration"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Sleep Duration"
+    clip_min: 3600
+    clip_max: 54000
+    mar_config:
+      conditions:
+        - column: "sleep_duration"
+          operator: "<"
+          value: "min"
+          multiplier: 1.05
+        - column: "sleep_start"
+          operator: "<"
+          value: "min"
+          multiplier: 1.05
+    mnar_config:
+      conditions:
+        - column: "sleep_duration"
+          operator: "<"
+          value: "min"
+          multiplier: 0.8
+
+  # IDX 4
+  - name: "activity_walking"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Activity Walking"
+    clip_min: 120
+    clip_max: 15000
+    mar_config:
+      conditions:
+        - column: "activity_walking"
+          operator: "<"
+          value: "min"
+          multiplier: 0.8
+        - column: "steps_steps_total"
+          operator: "<"
+          value: "min"
+          multiplier: 0.8
+    mnar_config:
+      conditions:
+        - column: "activity_walking"
+          operator: "<"
+          value: "min"
+          multiplier: 0.75
+
+  # IDX 5
+  - name: "app_usage_total"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "App Usage Total"
+    clip_min: 180
+    clip_max: 35000
+    mar_config:
+      conditions:
+        - column: "app_usage_total"
+          operator: ">"
+          value: "max"
+          multiplier: 0.8
+        - column: "location_time_home"
+          operator: ">"
+          value: "min"
+          multiplier: 0.9
+    mnar_config:
+      conditions:
+        - column: "app_usage_total"
+          operator: ">"
+          value: "max"
+          multiplier: 0.8
+
+  # IDX 6
+  - name: "location_clusters_count"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Location Clusters Count"
+    clip_min: 1
+    clip_max: 15
+    mar_config:
+      conditions:
+        - column: "location_clusters_count"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+        - column: "location_distance"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+    mnar_config:
+      conditions:
+        - column: "location_clusters_count"
+          operator: ">"
+          value: "max"
+          multiplier: 0.8
+
+  # IDX 7
+  - name: "steps_steps_total"
+    type: "continuous_positive"
+    is_complete: false
+    is_uninformative: false
+    text: "Steps Total"
+    clip_min: 150
+    clip_max: 25000
+    mar_config:
+      conditions:
+        - column: "steps_steps_total"
+          operator: "<"
+          value: "min"
+          multiplier: 0.8
+        - column: "activity_walking"
+          operator: "<"
+          value: "min"
+          multiplier: 0.8
+    mnar_config:
+      conditions:
+        - column: "steps_steps_total"
+          operator: "<"
+          value: "min"
+          multiplier: 0.75
+
+  # # IDX 8 (TO REMOVE)
+
+  # - name: "activity_vehicle"
+  #   type: "continuous_positive"
+  #   is_complete: false
+  #   is_uninformative: false
+  #   text: "Activity Vehicle"
+  #   clip_min: 0
+  #   clip_max: 25000
+
+  # IDX 8
+  - name: "weekend"
+    type: "binary"
+    is_complete: true
+    is_uninformative: false
+    text: "Weekend"
+    clip_min: null
+    clip_max: null
+    mar_config:
+      conditions:
+        - column: "weekend"
+          operator: "=="
+          value: 1
+          multiplier: 1
+        - column: "app_usage_total"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+    mnar_config:
+      conditions:
+          - column: "weekend"
+            operator: "=="
+            value: 1
+            multiplier: 1
+          - column: "app_usage_total"
+            operator: ">"
+            value: "max"
+            multiplier: 0.9
+
+
+  # IDX 9
+  - name: "practiced_sport"
+    type: "binary"
+    is_complete: true
+    is_uninformative: false
+    text: "Practiced Sport"
+    clip_min: null
+    clip_max: null
+    mar_config:
+      conditions:
+        - column: "practiced_sport"
+          operator: "=="
+          value: 1
+          multiplier: 1
+        - column: "steps_steps_total"
+          operator: ">"
+          value: "max"
+          multiplier: 0.9
+    mnar_config:
+      conditions:
+          - column: "practiced_sport"
+            operator: "=="
+            value: 1
+            multiplier: 1
+          - column: "steps_steps_total"
+            operator: ">"
+            value: "max"
+            multiplier: 0.9
+
+
+
+services:
+  # Mapping from service codes to marker shapes for visualization
+  shapes:
+    '0': '^' # Cognitive deterioration prevention
+    '1': '<' # Cognitive deterioration monitoring
+    '2': 'd' # Suicide prevention (Smartcrisis 2.0)
+    '3': 'p' # HIV patient monitoring
+    '7': 'v' # Oncological monitoring
+    '8': 'v' # Oncological monitoring
+    '9': 'v' # Oncological monitoring
+    '10': 'v' # Oncological monitoring
+    '11': 'v' # Oncological monitoring
+    '12': 'v' # Oncological monitoring
+    '13': 'v' # Oncological monitoring
+    '14': 'v' # Oncological monitoring
+    '16': 'h' # Depression and anxiety disorder monitoring
+    '18': 'o' # Suicide prevention (Smartcrisis 1.0)
+    '23': 'o' # Suicide prevention (Smartcrisis 1.0)
+    '28': 's' # TCA monitoring
+    '29': 's' # TCA monitoring
+    '30': 's' # TCA monitoring
+    '31': 's' # TCA monitoring
+    '32': 's' # TCA monitoring
+    '33': 's' # TCA monitoring
+    '34': 's' # TCA monitoring
+    '35': 's' # TCA monitoring
+    '36': 's' # TCA monitoring
+    '37': 's' # TCA monitoring
+    '63': 'v' # Oncological monitoring
+    '65': '^' # Cognitive deterioration prevention
+    '66': '^' # Cognitive deterioration prevention
+    '67': '^' # Cognitive deterioration prevention
+    '68': '^' # Cognitive deterioration prevention
+    '69': '^' # Cognitive deterioration prevention
+    '70': 's' # TCA monitoring
+    '71': 's' # TCA monitoring
+    '72': 's' # TCA monitoring
+    '73': 's' # TCA monitoring
+    '74': '^' # Cognitive deterioration prevention
+    'Others': '*'
+
+  # Mapping from service codes to human-readable labels for visualization
+  labels:
+    '0': 'Cognitive deterioration prevention'
+    '1': 'Cognitive deterioration monitoring'
+    '2': 'Suicide prevention (Smartcrisis 2.0)'
+    '3': 'HIV patient monitoring'
+    '7': 'Oncological monitoring'
+    '8': 'Oncological monitoring'
+    '9': 'Oncological monitoring'
+    '10': 'Oncological monitoring'
+    '11': 'Oncological monitoring'
+    '12': 'Oncological monitoring'
+    '13': 'Oncological monitoring'
+    '14': 'Oncological monitoring'
+    '16': 'Depression/Anxiety disorder monitoring'
+    '18': 'Suicide prevention (Smartcrisis 1.0)'
+    '23': 'Suicide prevention (Smartcrisis 1.0)'
+    '28': 'TCA monitoring'
+    '29': 'TCA monitoring'
+    '30': 'TCA monitoring'
+    '31': 'TCA monitoring'
+    '32': 'TCA monitoring'
+    '33': 'TCA monitoring'
+    '34': 'TCA monitoring'
+    '35': 'TCA monitoring'
+    '36': 'TCA monitoring'
+    '37': 'TCA monitoring'
+    '63': 'Oncological monitoring'
+    '65': 'Cognitive deterioration prevention'
+    '66': 'Cognitive deterioration prevention'
+    '67': 'Cognitive deterioration prevention'
+    '68': 'Cognitive deterioration prevention'
+    '69': 'Cognitive deterioration prevention'
+    '70': 'TCA monitoring'
+    '71': 'TCA monitoring'
+    '72': 'TCA monitoring'
+    '73': 'TCA monitoring'
+    '74': 'Cognitive deterioration prevention'
+    'Others': 'Other services'
