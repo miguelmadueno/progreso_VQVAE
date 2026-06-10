@@ -239,13 +239,13 @@ class inference_DailyPatientSummaryDataset(Dataset):
         self.invalid_indices = []
         
         self.common_preprocessing()
-        self._cache_data_to_memory()
 
     
     def common_preprocessing(self):
 
         # First Steps for preprocessing the data
         self.dataset["date_time"] = pd.to_datetime(self.dataset["date_time"], format = f"%Y-%m-%d")
+        
         self.dataset = self.dataset.sort_values(by = "date_time")
 
         # Filter out to retain only the needed columns for the model
@@ -295,7 +295,7 @@ class inference_DailyPatientSummaryDataset(Dataset):
                 print(f"Patient ID with sequence length 0: {index}")
                 continue
 
-            # Ensure "user" column is consistent
+            # Ensure "user" column is consisten
 
             sample["user"] = index
 
@@ -317,70 +317,6 @@ class inference_DailyPatientSummaryDataset(Dataset):
         # Scale real-valued columns
         self.dataset[self.continuous_real_valued_cols] = \
             real_scaler.fit_transform(self.dataset[self.continuous_real_valued_cols])
-
-    def _cache_data_to_memory(self) -> None:
-        """
-        Pre-computes and caches patient sequences as pure NumPy arrays.
-        Executes an O(N) grouping operation exactly once to allow O(1) __getitem__ lookups,
-        preventing DataLoader worker starvation and GPU idling.
-        """
-        self.samples = []
-        
-        # Pre-calculate category indices for O(1) mask adjustment during caching
-        category_column_mappings = []
-        for cat in self.categorical:
-            cat_cols = [col for col in self.dataset.columns if col.startswith(cat + "_")]
-            if cat_cols:
-                # Get integer positions of these columns, adjusting for uninformative drops
-                # We drop uninformative columns before creating the final signal array
-                temp_df = self.dataset.drop(columns=self.uninformative, errors="ignore")
-                cat_indices = [temp_df.columns.get_loc(col) for col in cat_cols if col in temp_df.columns]
-                category_column_mappings.append(cat_indices)
-
-        # Group by user once. This is highly optimized in Pandas.
-        grouped = self.dataset.groupby('user')
-        
-        for patient_id, group in grouped:
-            dates = group['date_time'].values
-            
-            # Drop uninformative columns to isolate the signal
-            signal_df = group.drop(columns=self.uninformative, errors="ignore")
-            
-            # Base mask: 1 where observed, 0 where NaN
-            mask_signal_df = 1 - signal_df.isna().astype(np.uint8)
-            mask_signal_np = mask_signal_df.to_numpy(dtype=np.uint8)
-
-            # Convert to pure NumPy arrays to release Pandas GIL constraints
-            signal_np = signal_df.to_numpy(dtype=np.float64)
-            mask_signal_np = mask_signal_df.to_numpy(dtype=np.uint8)
-            
-            original_mask_np = np.copy(mask_signal_np)
-
-            # Calculate some_observed flag (0 or 1)
-            some_observed = (np.count_nonzero(mask_signal_np, axis=1) > 0).astype(np.uint8)
-            
-            # Apply categorical mask adjustments statically
-            for cat_indices in category_column_mappings:
-                if not cat_indices:
-                    continue
-                # If sum of one-hot encoded category is 0, the original was NaN
-                category_mask = signal_np[:, cat_indices]
-                sum_category_mask = category_mask.sum(axis=1)
-                mask_signal_np[:, cat_indices] = np.where(sum_category_mask[:, None] == 0, 0, 1)
-
-            # Assertions to guarantee integrity before training loop
-            assert np.isnan(signal_np[mask_signal_np == 1]).sum() == 0, "Observed data contains NaNs."
-            
-            # Store in O(1) lookup structure
-            self.samples.append({
-                "user": patient_id,
-                "dates": dates,
-                "signal": signal_np,
-                "mask_signal": mask_signal_np,
-                "mask": original_mask_np,
-                "length": signal_np.shape[0],
-                "some_observed": some_observed
-                })
     
     def __len__(self) -> int:
         """
@@ -411,34 +347,92 @@ class inference_DailyPatientSummaryDataset(Dataset):
                 - 'some_observed': Indicator of whether any data is observed.
         """
 
-        # 1. O(1) Data Retrieval
-        sample_data = self.samples[index]
-        
-        # 2. Deepcopy to prevent in-place mutation of cached data across epochs
-        signal = np.copy(sample_data["signal"])
-        mask_signal = np.copy(sample_data["mask_signal"])
-        
+        # Retrieve patient identifier
+        patient_id = self.indices[index]
+        sample = self.dataset[self.dataset['user'] == patient_id].reset_index(drop=True)
 
-        # 4. Create zero-imputed signal representation
-        signal_imp = np.copy(signal)
-        signal_imp[(mask_signal == 0) | (mask_signal == 2)] = 0.0
+        dates = sample['date_time']
 
-        # 5. Construct final sample
+        # Remove uninformative columns
+        signal = sample.drop(self.uninformative, axis=1)
+
+        # Extract missingness masks from sample
+        mask_signal = 1 - signal.isna()
+
+        # Create an indicator for whether any data is observed per day
+        some_observed = np.count_nonzero(mask_signal, axis=1)
+        some_observed[some_observed != 0] = 1
+
+        try:
+            # Ensure some_observed contains only 0 and 1
+            assert 0 < np.unique(some_observed).shape[0] < 3
+            assert (np.unique(some_observed) == np.array([0, 1])).any()
+            assert np.unique(some_observed, return_counts=True)[1].sum() == some_observed.shape[0]
+        except AssertionError:
+            # If assertion fails, enter debugging mode
+            breakpoint()
+
+        # Remove redundant columns (currently empty list)
+
+        remove = []
+        mask = mask_signal.drop(remove, axis = 1)
+
+        # Convert data masks to numpy arrays
+        signal = signal.to_numpy(dtype = np.float64)
+        mask_signal = mask_signal.to_numpy(dtype = np.uint8)
+        mask = mask.to_numpy(dtype = np.uint8)
+
+        length = signal.shape[0]
+
+        # Handle categorical columns by adjusting masks
+
+        for cat in self.categorical:
+            
+            category_columns = [col for col in self.dataset.columns if col.startswith(cat + "_")]
+            if category_columns:
+                
+                # Get the indices of the category columns in the DataFrame
+                category_indices = [self.dataset.columns.get_loc(col) for col in category_columns]
+                # Subtract 2 to account for deletion of 'user' & 'date_time'
+                category_indices = [cat_idx - 2 for cat_idx in category_indices]
+
+                # Sum across the columns for each one-hot encoded category
+                # If sum is zero, it means the original was NaN
+                category_mask = signal[:, category_indices]
+                sum_category_mask = category_mask.sum(axis=1)
+
+                # Where the sum is zero, set all category mask entries to 0
+                mask_signal[:, category_indices] = np.where(sum_category_mask[:, None] == 0, 0, 1)
+
+        # Ensure no NaNs in observed data
+        assert np.isnan(signal[mask_signal == 1]).sum() == 0, \
+            "Observed data contains NaNs."
+
+        # Create a copy of the signal with missingness imputed as zeros
+        signal_imp = copy.deepcopy(signal)
+
+        # Impute 'signal_imp' with zeros wherever the mask indicates missingness
+        signal_imp[(mask_signal == 0) | (mask_signal == 2)] = 0
+
+        # Construct the sample dictionary
         sample = {
             "signal": signal,
             "signal_imp": signal_imp,
             "mask_signal": mask_signal,
-            "mask": sample_data["mask"], 
-            "length": sample_data["length"],
-            "user": sample_data["user"],
-            "dates": sample_data["dates"],
-            "some_observed": sample_data["some_observed"]
+            "mask": mask,
+            "length": length,
+            "user": patient_id,
+            "dates": dates,
+            "some_observed": some_observed
         }
 
+        # Apply any additional transformations if specified
         if self.transform:
             sample = self.transform(sample)
 
         return sample
+
+
 
 #################################################################
 ########################    TRAINING     ########################
@@ -584,7 +578,6 @@ class DailyPatientSummaryDataset(Dataset):
 
         # Print dataset statistics after transformations
         self.print_statistics("After transformations")
-        self._cache_data_to_memory()
 
     def common_processing(self) -> None:
         """
@@ -600,12 +593,13 @@ class DailyPatientSummaryDataset(Dataset):
         self.dataset = self.dataset.sort_values(by="date_time")
 
         ## Define patient indices ##
+        
         self.indices = pd.unique(self.dataset["user"]).tolist()
 
         ## Split & merge patient non-consecutive sequences ##
         if (self.split != "test" and self.selected_test) or not self.selected_test:
             new_dataset = []
-            max_index = max(self.indices) + 1
+            #max_index = max(self.indices) + 1 # COMENTADO
 
             # Iterate over all unique patients
             for index in self.indices:
@@ -655,11 +649,12 @@ class DailyPatientSummaryDataset(Dataset):
                     sample = sample.merge(new_sample, "outer").sort_values(by="date_time")
 
                     # Assign new 'user' identifiers to these new samples
-                    sample["user"] = max_index + pointer
+                    # sample["user"] = max_index + pointer # COMENTADO
+                    sample["user"] = f"{index}_{pointer}" # AÑADIDO
                     new_dataset.append(sample)
 
                 # Update 'max_index' for the next set of new user identifiers
-                max_index += pointer + 1
+                # max_index += pointer + 1 # COMENTADO
 
             # Concatenate all new samples to form the updated dataset
             self.dataset = pd.concat(new_dataset)
@@ -783,70 +778,6 @@ class DailyPatientSummaryDataset(Dataset):
             print(f"\nStatistics {stage}:")
             stats = self.dataset[relevant_numeric_cols].describe(percentiles=[.25, .5, .75])
             print(stats)
-    
-    def _cache_data_to_memory(self) -> None:
-        """
-        Pre-computes and caches patient sequences as pure NumPy arrays.
-        Executes an O(N) grouping operation exactly once to allow O(1) __getitem__ lookups,
-        preventing DataLoader worker starvation and GPU idling.
-        """
-        self.samples = []
-        
-        # Pre-calculate category indices for O(1) mask adjustment during caching
-        category_column_mappings = []
-        for cat in self.categorical:
-            cat_cols = [col for col in self.dataset.columns if col.startswith(cat + "_")]
-            if cat_cols:
-                # Get integer positions of these columns, adjusting for uninformative drops
-                # We drop uninformative columns before creating the final signal array
-                temp_df = self.dataset.drop(columns=self.uninformative, errors="ignore")
-                cat_indices = [temp_df.columns.get_loc(col) for col in cat_cols if col in temp_df.columns]
-                category_column_mappings.append(cat_indices)
-
-        # Group by user once. This is highly optimized in Pandas.
-        grouped = self.dataset.groupby('user')
-        
-        for patient_id, group in grouped:
-            dates = group['date_time'].values
-            
-            # Drop uninformative columns to isolate the signal
-            signal_df = group.drop(columns=self.uninformative, errors="ignore")
-            
-            # Base mask: 1 where observed, 0 where NaN
-            mask_signal_df = 1 - signal_df.isna().astype(np.uint8)
-            mask_signal_np = mask_signal_df.to_numpy(dtype=np.uint8)
-
-            # Convert to pure NumPy arrays to release Pandas GIL constraints
-            signal_np = signal_df.to_numpy(dtype=np.float64)
-            mask_signal_np = mask_signal_df.to_numpy(dtype=np.uint8)
-            
-            original_mask_np = np.copy(mask_signal_np)
-
-            # Calculate some_observed flag (0 or 1)
-            some_observed = (np.count_nonzero(mask_signal_np, axis=1) > 0).astype(np.uint8)
-            
-            # Apply categorical mask adjustments statically
-            for cat_indices in category_column_mappings:
-                if not cat_indices:
-                    continue
-                # If sum of one-hot encoded category is 0, the original was NaN
-                category_mask = signal_np[:, cat_indices]
-                sum_category_mask = category_mask.sum(axis=1)
-                mask_signal_np[:, cat_indices] = np.where(sum_category_mask[:, None] == 0, 0, 1)
-
-            # Assertions to guarantee integrity before training loop
-            assert np.isnan(signal_np[mask_signal_np == 1]).sum() == 0, "Observed data contains NaNs."
-            
-            # Store in O(1) lookup structure
-            self.samples.append({
-                "user": patient_id,
-                "dates": dates,
-                "signal": signal_np,
-                "mask_signal": mask_signal_np,
-                "mask": original_mask_np,
-                "length": signal_np.shape[0],
-                "some_observed": some_observed
-                })
 
     def __len__(self) -> int:
         """
@@ -857,8 +788,7 @@ class DailyPatientSummaryDataset(Dataset):
         """
         return len(self.indices)
 
-    def __getitem__(self, index) -> Dict[str, np.ndarray]:
-        
+    def __getitem__(self, index: int) -> Dict[str, np.ndarray]:
         """
         Retrieves a sample from the dataset at the specified index.
         
@@ -876,17 +806,60 @@ class DailyPatientSummaryDataset(Dataset):
                 - 'dates': Dates corresponding to the sequence.
                 - 'some_observed': Indicator of whether any data is observed.
         """
+        # Retrieve patient identifier
+        patient_id = self.indices[index]
+        sample = self.dataset[self.dataset['user'] == patient_id].reset_index(drop=True)
 
-        # 1. O(1) Data Retrieval
-        sample_data = self.samples[index]
+        dates = sample['date_time']
+
+        # Remove uninformative columns
+        signal = sample.drop(self.uninformative, axis=1)
+
+        # Extract missingness masks from sample
+        mask_signal = 1 - signal.isna()
+
+        # Create an indicator for whether any data is observed per day
+        some_observed = np.count_nonzero(mask_signal, axis=1)
+        some_observed[some_observed != 0] = 1
+
+        try:
+            # Ensure some_observed contains only 0 and 1
+            assert 0 < np.unique(some_observed).shape[0] < 3
+            assert (np.unique(some_observed) == np.array([0, 1])).any()
+            assert np.unique(some_observed, return_counts=True)[1].sum() == some_observed.shape[0]
+        except AssertionError:
+            # If assertion fails, enter debugging mode
+            breakpoint()
+
+        # Remove redundant columns (currently empty list)
+        remove = []
+        mask = mask_signal.drop(remove, axis=1)
         
-        # 2. Deepcopy to prevent in-place mutation of cached data across epochs
-        signal = np.copy(sample_data["signal"])
-        mask_signal = np.copy(sample_data["mask_signal"])
+        # Convert data and masks to numpy arrays
+        signal = signal.to_numpy()
+        mask_signal = mask_signal.to_numpy(dtype=np.uint8)
+        mask = mask.to_numpy(dtype=np.uint8)
         
-        # 3. Apply synthetic missingness (MCAR, MAR, MNAR) dynamically
-        # Note: If MAR/MNAR evaluate_conditions use pandas internally, 
-        # they must ALSO be refactored to use pure NumPy to maintain this speedup.
+        length = signal.shape[0]
+
+        # Handle categorical columns by adjusting masks
+        for cat in self.categorical:
+            category_columns = [col for col in self.dataset.columns if col.startswith(cat + "_")]
+            if category_columns:
+                # Get the indices of the category columns in the DataFrame
+                category_indices = [self.dataset.columns.get_loc(col) for col in category_columns]
+                # Subtract 2 to account for deletion of 'user' & 'date_time'
+                category_indices = [cat_idx - 2 for cat_idx in category_indices]
+
+                # Sum across the columns for each one-hot encoded category
+                # If sum is zero, it means the original was NaN
+                category_mask = signal[:, category_indices]
+                sum_category_mask = category_mask.sum(axis=1)
+
+                # Where the sum is zero, set all category mask entries to 0
+                mask_signal[:, category_indices] = np.where(sum_category_mask[:, None] == 0, 0, 1)
+
+        # Apply synthetic missingness based on the specified mode
         if self.missingness_mode == "MCAR":
             mask_signal = create_mcar_mask(mask_signal, signal, self.missing_rate)
         elif self.missingness_mode == "MNAR":
@@ -894,29 +867,39 @@ class DailyPatientSummaryDataset(Dataset):
         elif self.missingness_mode == "MAR":
             mask_signal = create_mar_mask(mask_signal, signal, self.missing_rate)
         else:
-            raise ValueError('Invalid missingness mode. Must be "MCAR", "MAR" or "MNAR".')
+            raise ValueError(
+                'Invalid missingness mode argument, must be either: "MCAR", "MAR" or "MNAR".'
+            )
 
-        # 4. Create zero-imputed signal representation
-        signal_imp = np.copy(signal)
-        signal_imp[(mask_signal == 0) | (mask_signal == 2)] = 0.0
+        # Ensure no NaNs in observed or synthetic missing data
+        assert np.isnan(signal[mask_signal == 1]).sum() == 0, \
+            "Observed data contains NaNs."
+        assert np.isnan(signal[mask_signal == 2]).sum() == 0, \
+            "Synthetic missingness data contains NaNs."
 
-        # 5. Construct final sample
+        # Create a copy of the signal with missingness imputed as zeros
+        signal_imp = copy.deepcopy(signal)
+
+        # Impute 'signal_imp' with zeros wherever the mask indicates missingness
+        signal_imp[(mask_signal == 0) | (mask_signal == 2)] = 0
+
+        # Construct the sample dictionary
         sample = {
             "signal": signal,
             "signal_imp": signal_imp,
             "mask_signal": mask_signal,
-            "mask": sample_data["mask"], 
-            "length": sample_data["length"],
-            "user": sample_data["user"],
-            "dates": sample_data["dates"],
-            "some_observed": sample_data["some_observed"]
+            "mask": mask,
+            "length": length,
+            "user": patient_id,
+            "dates": dates,
+            "some_observed": some_observed
         }
 
+        # Apply any additional transformations if specified
         if self.transform:
             sample = self.transform(sample)
 
         return sample
-
 
 def create_mcar_mask(
         mask_signal: np.ndarray,
@@ -1208,6 +1191,7 @@ def evaluate_conditions(
         np.ndarray of shape (n_samples,) with the bool values.
     """
 
+    # Load conditions ---
     def get_conditions(feat_idx: int):
         for col in c.feature_cols:
             if col["index"] == feat_idx:
@@ -1221,6 +1205,7 @@ def evaluate_conditions(
     if not conditions:
         return np.zeros(signal.shape[0], dtype=bool)  # no conditions → no MAR
 
+    # Evaluate all rule blocks ---
     bool_array = []
 
     for condition in conditions:

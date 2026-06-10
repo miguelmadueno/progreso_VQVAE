@@ -10,10 +10,14 @@ from torch.utils.data import DataLoader
 import api_constants as c
 import api_data_processing
 
+import gensim
+from gensim.models import LdaMulticore
+from gensim.models.coherencemodel import CoherenceModel
 
 import time
 import copy
 import pickle
+
 
 from torch.utils.tensorboard import SummaryWriter
 
@@ -22,6 +26,7 @@ import seaborn as sns
 
 import logging
 import logging.config
+import torch
 
 from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
                              precision_score, recall_score)
@@ -111,10 +116,77 @@ def custom_collate_fn(batch: list) -> Dict[str, Union[Dict[str, torch.Tensor], t
         'input': input_collated,
         'future': future_collated,
         'lengths': torch.tensor(lengths),
-        'users': torch.tensor(users),
+        #'users': torch.tensor(users), # COMENTADO
+        'users': users, # AÑADIDO
         'dates': dates_batch,
         'some_observed': some_observed_batch
     }
+
+
+
+def differentiable_uci_loss(pseudo_probs, eps=1e-8):
+    """
+    Calculates a differentiable proxy for UCI Coherence (Soft PMI).
+    
+    Args:
+        pseudo_probs: Tensor of shape (Batch_Size, Sequence_Length, Num_Embeddings)
+        eps: Small value for numerical stability in logarithms
+    Returns:
+        loss: A scalar tensor representing the negative weighted PMI.
+    """
+    B, T, K = pseudo_probs.shape
+    
+    # Step A: Marginal Probability P(k)
+    # Shape: (K,)
+    p_k = pseudo_probs.mean(dim=(0, 1)) 
+    
+    # Step B: Joint Probability P(i, j)
+    # 1. Get sequence-level probabilities. Shape: (B, K)
+    seq_probs = pseudo_probs.mean(dim=1)
+    
+    # 2. Calculate co-occurrence matrix. Shape: (K, K)
+    p_ij = torch.matmul(seq_probs.t(), seq_probs) / B
+    
+    # Step C: Pointwise Mutual Information (PMI)
+    # P(i) * P(j) is generated using an outer product
+    p_i_p_j = torch.ger(p_k, p_k) # Shape: (K, K)
+    
+    # Calculate PMI matrix
+    pmi = torch.log(p_ij + eps) - torch.log(p_i_p_j + eps)
+    
+    # Remove diagonal (we don't care about a code's coherence with itself)
+    identity = torch.eye(K, device=pseudo_probs.device)
+    off_diagonal_mask = 1.0 - identity
+    
+    # Step D: Calculate Final Loss
+    # We weight the PMI by how often they actually co-occur, 
+    # mask out the diagonal, and negate it to maximize coherence.
+    weighted_pmi = p_ij * pmi * off_diagonal_mask
+    uci_loss = -torch.sum(weighted_pmi)
+    
+    return uci_loss
+
+def train_and_get_uci(epoch_documents: list[str],num_t: int):
+    print("Calculating UCI Coherence Score...")
+    D = gensim.corpora.Dictionary(epoch_documents)
+    corpus_bow = [D.doc2bow(doc) for doc in epoch_documents]
+    lda_model = LdaMulticore(
+        corpus=corpus_bow, 
+        num_topics=num_t, 
+        id2word=D, 
+        passes=10, 
+        random_state=42
+    )
+    cm = CoherenceModel(
+        model=lda_model, 
+        texts=epoch_documents, 
+        dictionary=D, 
+        coherence='c_uci'
+    )
+    uci_score = cm.get_coherence()
+
+
+    return uci_score
 
 #################################################################
 ########################    INFERENCE    ########################
@@ -142,6 +214,7 @@ def partition_generator(
 
     # Read the original CSV data
     df_ = pd.read_csv(original_data_path)
+    df_['user'] = df_['user'].astype(str) #AÑADIDO
 
     # Replace invalid heart rate values (-1, -1.0) with NaN
     heart_rate_cols = ["heart_rate_hr_mean", "heart_rate_hr_min", "heart_rate_hr_max"]
@@ -324,16 +397,14 @@ def get_loaders(
         train_dataset,
         batch_size=train_batch_size,
         shuffle=True,
-        num_workers=num_workers,
-        pin_memory= True
+        num_workers=num_workers
     )
 
     val_loader = DataLoader(
         val_dataset,
         batch_size=val_batch_size,
         shuffle=False,
-        num_workers=num_workers,
-        pin_memory= True
+        num_workers=num_workers
     )
 
 
@@ -342,8 +413,7 @@ def get_loaders(
         test_dataset,
         batch_size=test_batch_size,
         shuffle=False,
-        num_workers=test_num_workers,
-        pin_memory= True
+        num_workers=test_num_workers
     )
 
     # Organize DataLoaders into a dictionary for easy access
@@ -474,8 +544,8 @@ def evaluate_features(outputs, labels, metric_names, mask_flag, scaler_params, p
     mask = mask.detach().cpu().numpy().copy()
 
     # Create copies for different mask conditions
-    outputs_xo = outputs.copy()
-    labels_xo = labels.copy()
+    outputs_xo = copy.deepcopy(outputs)
+    labels_xo = copy.deepcopy(labels)
 
     # Zero out data based on mask conditions
     outputs_xo[(mask == 0) | (mask == 2)] = 0
@@ -617,8 +687,6 @@ def evaluate_features(outputs, labels, metric_names, mask_flag, scaler_params, p
                 if writer is not None and global_step is not None:
                     writer.add_figure(f'{idx}/{phase}/Conf_Matrix_xo', fig, global_step=global_step)
 
-                plt.close(fig)
-
         else:            
             metrics[idx]["acc_xo"] = 0.0
             metrics[idx]["prec_xo"] = 0.0
@@ -649,8 +717,6 @@ def evaluate_features(outputs, labels, metric_names, mask_flag, scaler_params, p
                 
                 if writer is not None and global_step is not None:
                     writer.add_figure(f'{idx}/{phase}/Conf_Matrix_xsm', fig, global_step=global_step)
-
-                plt.close(fig)
         else:
             metrics[idx]["acc_xsm"] = 0.0
             metrics[idx]["prec_xsm"] = 0.0
@@ -659,40 +725,6 @@ def evaluate_features(outputs, labels, metric_names, mask_flag, scaler_params, p
             print(f"No data available to plot Conf Matrix [XSM] for Phase: {phase} Var: {idx}")
 
     return metrics
-
-def obtain_legacy_embed_info(embedding_info_dict):
-    """
-    Converts the fast GPU dictionary back to the slow 
-    NumPy structured array format for inspection.
-    """
-    # Move to CPU once
-    ids = embedding_info_dict["embed_id"].cpu().numpy()
-    dists = embedding_info_dict["eu_dist"].cpu().numpy()
-    probs = embedding_info_dict["pseudo_probs"].cpu().numpy()
-    
-    batch_size, seq_len, num_embed = ids.shape
-    
-    struct_dtype = [
-        ("rank", np.int32),
-        ("embed_id", np.int32),
-        ("eu_dist", np.float32),
-        ("pseudo_probs", np.float32),
-    ]
-    
-    # Initialize the object array
-    legacy_info = np.empty((batch_size, seq_len), dtype=object)
-    ranks = np.arange(num_embed, dtype=np.int32)
-
-    for b in range(batch_size):
-        for l in range(seq_len):
-            info_array = np.zeros(num_embed, dtype=struct_dtype)
-            info_array["rank"] = ranks
-            info_array["embed_id"] = ids[b, l]
-            info_array["eu_dist"] = dists[b, l]
-            info_array["pseudo_probs"] = probs[b, l]
-            legacy_info[b, l] = info_array
-            
-    return legacy_info
 
 
 def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weight, 
@@ -728,21 +760,27 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
     model_losses_dir = os.path.join(checkpoint_path,"losses", name)
     os.makedirs(model_losses_dir, exist_ok=True)
 
+    # Directory to track models
+    model_track_dir = os.path.join(checkpoint_path,"model_track")
+    os.makedirs(model_track_dir, exist_ok=True)
+
     # Initialize TensorBoard writer
     writer = SummaryWriter(log_dir=model_losses_dir)
-    losses_file_path = os.path.join(checkpoint_path,model_losses_dir, f"losses_{name}.txt")
+    #losses_file_path = os.path.join(checkpoint_path,model_losses_dir, f"losses_{name}.txt") #COMENTADO
+    losses_file_path = os.path.join(model_losses_dir, f"losses_{name}.txt") #AÑADIDO
 
     # Paths to save model and results
     model_path = os.path.join(checkpoint_path, f'vqvae_{name}.pt')
     results_path = os.path.join(checkpoint_path, f'vqvae_{name}.pkl')
 
-    # Define the number of features
-    n_feats = len(set(c.COLS) - set(c.UNINFORMATIVE))
 
     # Define loss weights for different reconstruction losses
     real_reco_loss_weight = 1.0
     positive_reco_loss_weight = 1.0
     binary_reco_loss_weight = 1.0
+
+    #num_t=[2,4,6,8,10,12]
+    num_t=None
 
     # Calculate class weights for binary variables
     pos_weights = calculate_class_weights(loaders, c.BINARY_IDX, device)
@@ -759,7 +797,10 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
 
         # Initialize loss and metric storage
         train_losses = np.zeros((num_epochs, 3))
-        val_losses = np.zeros((num_epochs, 3))
+        if num_t:
+            val_losses = np.zeros((num_epochs, 3+len(num_t)))
+        else:
+            val_losses = np.zeros((num_epochs, 3))
         train_metrics_list = []
         val_metrics_list = []
 
@@ -770,15 +811,19 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
 
         phases = ('train', 'val')
 
-        epoch_aggregated_xo = np.zeros((num_epochs, n_feats))
-        epoch_aggregated_xom = np.zeros((num_epochs, n_feats))
-        epoch_aggregated_xsm = np.zeros((num_epochs, n_feats))
+        epoch_aggregated_xo = np.zeros((num_epochs, 10))
+        epoch_aggregated_xom = np.zeros((num_epochs, 10))
+        epoch_aggregated_xsm = np.zeros((num_epochs, 10))
         
+
         for epoch in range(num_epochs):
+            print(f'Epoch {epoch+1}/{num_epochs}')
             f.write(f'\nEpoch {epoch+1}/{num_epochs}\n')
-            print(f'\nEpoch {epoch+1}/{num_epochs}\n')
             
             for phase in phases:
+
+                epoch_documents = []
+
                 training = phase == 'train'
                 if training:
                     model.train()
@@ -796,15 +841,15 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                 running_positive_reco_loss_xsm = 0
                 running_binary_reco_loss_xsm = 0
 
-                running_reco_loss_per_var = [0] * n_feats
-                running_reco_loss_xsm_per_var = [0] * n_feats
+                running_reco_loss_per_var = [0] * 10
+                running_reco_loss_xsm_per_var = [0] * 10
 
                 running_metrics = create_metric_dict(zero_init=True)
                 data_size = 0
 
-                epoch_xo = np.zeros(n_feats)
-                epoch_xom = np.zeros(n_feats)
-                epoch_xsm = np.zeros(n_feats)
+                epoch_xo = np.zeros(10)
+                epoch_xom = np.zeros(10)
+                epoch_xsm = np.zeros(10)
                 batch_count = 0
 
                 for sample in loaders[phase]:
@@ -846,7 +891,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                     
                     with torch.set_grad_enabled(training):
                         # Forward pass through the model
-                        outputs, latent_loss, *_ = model(inputs, mask_)
+                        outputs, latent_loss, indices, embedding_info = model(inputs, mask_)
 
                         # Check for NaNs in outputs
                         if torch.isnan(outputs).any():
@@ -854,11 +899,10 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                             raise ValueError("NaNs detected in model outputs")
 
                         # Evaluate features and compute metrics
-                        if not training and (epoch + 1) % -1.23131232 == 0:
-                            metrics = evaluate_features(
-                                outputs, labels, metric_names, mask_flag,
-                                scaler_params, phase, writer, epoch, mask
-                            )
+                        metrics = evaluate_features(
+                            outputs, labels, metric_names, mask_flag,
+                            scaler_params, phase, writer, epoch, mask
+                        )
 
                         # Count the number of masked entries
                         xo_counts = (mask == 1).sum(dim=(0, 2)).cpu().numpy()
@@ -881,8 +925,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                         positive_reco_loss_xsm = 0
                         binary_reco_loss_xsm = 0
 
-                        reco_loss_per_var = [None] * n_feats
-                        reco_loss_xsm_per_var = [None] * n_feats
+                        reco_loss_per_var = [None] * 10
+                        reco_loss_xsm_per_var = [None] * 10
 
                         mse_loss_function = torch.nn.MSELoss(reduction="none")
 
@@ -902,7 +946,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in continuous real-valued loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in continuous real-valued loss for idx {idx}.")
                                 real_reco_loss += mean_cr_loss / len(c.CONTINUOUS_REAL_VALUED_IDX)
-                                reco_loss_per_var[idx] = mean_cr_loss.item() if isinstance(mean_cr_loss, torch.Tensor) else mean_cr_loss
+                                reco_loss_per_var[idx] = mean_cr_loss
 
                                 # Synthetic missing data (mask == 2)
                                 mask_xsm = mask[:, idx] == 2
@@ -915,7 +959,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in continuous real-valued loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in continuous real-valued loss for idx {idx}.")
                                 real_reco_loss_xsm += mean_cr_loss_xsm / num_features
-                                reco_loss_xsm_per_var[idx] = mean_cr_loss_xsm.item() if isinstance(mean_cr_loss_xsm, torch.Tensor) else mean_cr_loss_xsm
+                                reco_loss_xsm_per_var[idx] = mean_cr_loss_xsm
 
                             if idx in c.CONTINUOUS_POSITIVE_IDX:
 
@@ -930,7 +974,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in continuous positive loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in continuous positive loss for idx {idx}.")
                                 positive_reco_loss += mean_cp_loss / num_features
-                                reco_loss_per_var[idx] = mean_cp_loss.item() if isinstance(mean_cp_loss, torch.Tensor) else mean_cp_loss
+                                reco_loss_per_var[idx] = mean_cp_loss
 
                                 # Synthetic missing data (mask == 2)
                                 mask_xsm = mask[:, idx] == 2
@@ -943,7 +987,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in continuous positive loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in continuous positive loss for idx {idx}.")
                                 positive_reco_loss_xsm += mean_cp_loss_xsm / num_features
-                                reco_loss_xsm_per_var[idx] = mean_cp_loss_xsm.item() if isinstance(mean_cp_loss_xsm, torch.Tensor) else mean_cp_loss_xsm
+                                reco_loss_xsm_per_var[idx] = mean_cp_loss_xsm
 
                             if idx in c.BINARY_IDX:
 
@@ -960,7 +1004,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in binary loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in binary loss for idx {idx}.")
                                 binary_reco_loss += mean_bn_loss / len(c.BINARY_IDX)
-                                reco_loss_per_var[idx] = mean_bn_loss.item() if isinstance(mean_bn_loss, torch.Tensor) else mean_bn_loss
+                                reco_loss_per_var[idx] = mean_bn_loss
                                 
                                 # Synthetic missing data (mask == 2)
                                 mask_xsm = mask[:, idx] == 2
@@ -973,7 +1017,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                                     logging.error(f"NaNs detected in binary loss for idx {idx}.")
                                     raise ValueError(f"NaNs detected in binary loss for idx {idx}.")
                                 binary_reco_loss_xsm += mean_bn_loss_xsm / len(c.BINARY_IDX)
-                                reco_loss_xsm_per_var[idx] = mean_bn_loss_xsm.item() if isinstance(mean_bn_loss_xsm, torch.Tensor) else mean_bn_loss_xsm
+                                reco_loss_xsm_per_var[idx] = mean_bn_loss_xsm
 
                         # Compute total reconstruction loss
                         latent_loss = latent_loss.mean()
@@ -983,11 +1027,24 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                             binary_reco_loss_weight * binary_reco_loss
                         )
                         loss = reco_loss + latent_weight * latent_loss
+
                         # Backpropagation and optimization step
                         if training:
                             loss.backward()
                             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=2.0, error_if_nonfinite=True)
                             optimizer.step()
+
+                        if phase == 'val':
+                            B, C, L = inputs.shape
+                            indices_2d = indices.view(B, L).cpu().numpy()
+                            mask_2d = (mask == 1).any(dim=1).cpu().numpy()
+                            for b in range(B):
+                                doc = []
+                                for t in range(L):
+                                    if mask_2d[b, t] == 1:
+                                        doc.append(f"word_{indices_2d[b, t]}")
+                                if len(doc) > 0:
+                                    epoch_documents.append(doc)
 
                         # Compute synthetic missing data loss
                         reco_loss_xsm = (
@@ -1011,14 +1068,13 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                     running_positive_reco_loss_xsm += positive_reco_loss_xsm.item() * batch_size
                     running_binary_reco_loss_xsm += binary_reco_loss_xsm.item() * batch_size
 
-                    for i in range(n_feats):
+                    for i in range(10):
                         running_reco_loss_per_var[i] += reco_loss_per_var[i] * batch_size
                         running_reco_loss_xsm_per_var[i] += reco_loss_xsm_per_var[i] * batch_size
-                    
-                    if not training  and (epoch + 1) % -1.23131232 == 0:
-                        for idx, var in enumerate(metrics):
-                            for metric_key, metric_val in var.items():
-                                running_metrics[idx][metric_key] += metric_val * batch_size
+
+                    for idx, var in enumerate(metrics):
+                        for metric_key, metric_val in var.items():
+                            running_metrics[idx][metric_key] += metric_val * batch_size
 
                     data_size += batch_size
 
@@ -1026,11 +1082,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                 mean_reco_loss = running_reco_loss / data_size
                 mean_latent_loss = running_latent_loss / data_size
                 mean_loss = mean_reco_loss + latent_weight * mean_latent_loss
-                # ONLY calculate mean metrics for validation
-                if not training and (epoch + 1) % -1.23131232 == 0:
-                    mean_metrics = [{k: v / data_size for k, v in d.items()} for d in running_metrics]
-                else:
-                    mean_metrics = [] # Empty list for training
+                mean_metrics = [{k: v / data_size for k, v in d.items()} for d in running_metrics]
 
                 mean_real_reco_loss = running_real_reco_loss / data_size
                 mean_positive_reco_loss = running_positive_reco_loss / data_size
@@ -1051,13 +1103,31 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                     
                     train_losses_per_var_list.append(mean_reco_loss_per_var)
                     train_losses_xsm_per_var_list.append(mean_reco_loss_xsm_per_var)
+
+                    #save model
+                    if epoch % 25 == 0:
+                        current_weights=copy.deepcopy(model.state_dict())
+                        torch.save(current_weights, os.path.join(model_track_dir, f'model_epoch_{epoch}.pt'))
+                        
                 else:
                     # Store validation losses and metrics
-                    val_losses[epoch, :] = (mean_reco_loss, mean_latent_loss, mean_loss)
+                    if num_t:
+                        l_uci_score = []
+                        for n in num_t:
+                            l_uci_score.append(train_and_get_uci(epoch_documents=epoch_documents,num_t=n))
+                        val_losses[epoch, :] = (mean_reco_loss, mean_latent_loss, mean_loss)+tuple(l_uci_score)
+                    else:
+                        val_losses[epoch, :] = (mean_reco_loss, mean_latent_loss, mean_loss)
+                    
+
                     val_metrics_list.append(mean_metrics)
 
                     val_losses_per_var_list.append(mean_reco_loss_per_var)
                     val_losses_xsm_per_var_list.append(mean_reco_loss_xsm_per_var)
+
+                
+                    
+                    
 
                 # Aggregate mask counts
                 epoch_aggregated_xo[epoch, :] = epoch_xo / batch_count
@@ -1078,7 +1148,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                 writer.add_scalar(f"Loss/{phase}/positive_xsm", mean_positive_reco_loss_xsm, global_step=epoch)
                 writer.add_scalar(f"Loss/{phase}/binary_xsm", mean_binary_reco_loss_xsm, global_step=epoch)
 
-                for i in range(n_feats):
+                for i in range(10):
                     writer.add_scalar(f"Loss/{phase}/{i}/xo", mean_reco_loss_per_var[i], global_step=epoch)
                     writer.add_scalar(f"Loss/{phase}/{i}/xsm", mean_reco_loss_xsm_per_var[i], global_step=epoch)
 
@@ -1098,30 +1168,28 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                 f.write(f'\n[{phase}]'.rjust(7) + f'   <loss> reco: {mean_reco_loss:.4f} | latent: {mean_latent_loss:.4f} | overall: {mean_loss:.4f}\n')
 
                 # Print and log metrics for each variable
-                if not training and (epoch + 1) % -1.23131232 == 0:
-                    for idx, var in enumerate(mean_metrics):
-                        for metric, value in var.items():
+                for idx, var in enumerate(mean_metrics):
+                    for metric, value in var.items():
 
-                            if metric not in [
-                                "acc_xo", "prec_xo", "rec_xo", "f1_xo", "conf_matrix",
-                                "acc_xsm", "prec_xsm", "rec_xsm", "f1_xsm"
-                                ]:
+                        if metric not in [
+                            "acc_xo", "prec_xo", "rec_xo", "f1_xo", "conf_matrix",
+                            "acc_xsm", "prec_xsm", "rec_xsm", "f1_xsm"
+                            ]:
 
-                                if "xo" in metric:
-                                    print(f'[{phase}] - Var {idx} ({metric}): {value:.4f}')
-                                elif "xsm" in metric:
-                                    print(f'[{phase}] - Var {idx} ({metric}): {value:.4f}')
-                
-
-                            elif metric in ["acc_xo", "prec_xo", "rec_xo", "f1_xo",
-                                            "acc_xsm", "prec_xsm", "rec_xsm", "f1_xsm"]:
+                            if "xo" in metric:
                                 print(f'[{phase}] - Var {idx} ({metric}): {value:.4f}')
+                            elif "xsm" in metric:
+                                print(f'[{phase}] - Var {idx} ({metric}): {value:.4f}')
+            
 
-                            writer.add_scalar(f"{idx}/{metric}/{phase}/agg", value, global_step=epoch)
+                        elif metric in ["acc_xo", "prec_xo", "rec_xo", "f1_xo",
+                                        "acc_xsm", "prec_xsm", "rec_xsm", "f1_xsm"]:
+                            print(f'[{phase}] - Var {idx} ({metric}): {value:.4f}')
+
+                        writer.add_scalar(f"{idx}/{metric}/{phase}/agg", value, global_step=epoch)
 
                     print()
-                
-                f.write('\n')
+                    f.write('\n')
 
                 if not training:
                     # Update best model based on validation loss
@@ -1234,8 +1302,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
     test_running_positive_reco_loss_xsm = 0
     test_running_binary_reco_loss_xsm = 0
 
-    test_running_reco_loss_per_var = [0] * n_feats
-    test_running_reco_loss_xsm_per_var = [0] * n_feats
+    test_running_reco_loss_per_var = [0] * 10
+    test_running_reco_loss_xsm_per_var = [0] * 10
 
     test_running_metrics = create_metric_dict(zero_init=True)
     test_data_size = 0
@@ -1282,8 +1350,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
             test_positive_reco_loss_xsm = 0
             test_binary_reco_loss_xsm = 0
 
-            test_reco_loss_per_var = [None] * n_feats
-            test_reco_loss_xsm_per_var = [None] * n_feats
+            test_reco_loss_per_var = [None] * 10
+            test_reco_loss_xsm_per_var = [None] * 10
 
             mse_loss_function = torch.nn.MSELoss(reduction="none")
 
@@ -1384,7 +1452,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
             test_running_positive_reco_loss_xsm += test_positive_reco_loss_xsm * batch_size
             test_running_binary_reco_loss_xsm += test_binary_reco_loss_xsm * batch_size
 
-            for i in range(n_feats):
+            for i in range(10):
                 test_running_reco_loss_per_var[i] += test_reco_loss_per_var[i] * batch_size
                 test_running_reco_loss_xsm_per_var[i] += test_reco_loss_xsm_per_var[i] * batch_size
 
@@ -1489,4 +1557,18 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
 
     logging.info(f"Finished training of model {name}.")
 
+    col_names_train = ['reco_loss','latent_loss','loss']
+    col_names_val = ['reco_loss','latent_loss','loss']
+    if num_t:
+        for n in num_t:
+            col_names_val.append(f'uci_{n}')
+
+    df_train_losses_uci = pd.DataFrame(data=train_losses, columns=col_names_train)
+    df_val_losses_uci = pd.DataFrame(data=val_losses, columns=col_names_val)
+    
+    df_train_losses_uci.to_csv('/Users/mmsanz/Desktop/Miguel/eB2/deployment-VQVAE-LDA-monitoring/scripts/model/train_losses_uci.csv',index=False)
+    df_val_losses_uci.to_csv('/Users/mmsanz/Desktop/Miguel/eB2/deployment-VQVAE-LDA-monitoring/scripts/model/val_losses_uci.csv',index=False)
+
+
     return (model,) + results
+
