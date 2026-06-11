@@ -11,8 +11,8 @@ from api import vqvae_training
 
 
 def main():
-    model_route = "/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a2/5000"
-    data_route = "/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/data/df_eb2_allvariables.csv"
+    model_route = None #"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a2/5000"
+    data_route = "/Users/mmsanz/Desktop/Miguel/eB2/datos_VQVAE/base_completa/example_payload.csv"
 
     hyperparameters = {
         # General
