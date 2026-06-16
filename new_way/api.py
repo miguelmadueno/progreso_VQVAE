@@ -218,7 +218,7 @@ class vqvae_inference():
         with torch.no_grad():
             for data_sample in data_loader:
                 # Load batch
-                inputs = data_sample['input']['signal_imp'].to(self.device).float()
+                inputs = data_sample['input']['signal_imp'].to(device=self.device, dtype=torch.float32) #.to(self.device).float()
                 masks = data_sample['input']['mask_signal'].to(self.device).float()
                 lengths = data_sample['lengths'].cpu().numpy()
                 users = data_sample['users'].cpu().numpy()
@@ -606,7 +606,17 @@ def vqvae_training(model_route:str,data_route:str,hyperparameters:dict ,):
                                                                 model_route= model_route)
     
     # Start the training process
-    torch.cuda.set_device(gpu_id)
+    #torch.cuda.set_device(gpu_id)
+    if torch.backends.mps.is_available():
+        device = torch.device("mps")  # For Apple Silicon Macs
+    elif torch.cuda.is_available():
+        device = torch.device("cuda:0") # For NVIDIA GPUs
+    else:
+        device = torch.device("cpu")
+
+
+
+
     model_name = f"{mode}_{int(time.time())}"
     print(f"Model set to train on GPU: {gpu_id} for model: {model_name} started. Preparing data loaders.")
 

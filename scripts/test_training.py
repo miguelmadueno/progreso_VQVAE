@@ -11,8 +11,8 @@ from api import vqvae_training
 
 
 def main():
-    model_route = None #"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a2/5000"
-    data_route = "/Users/mmsanz/Desktop/Miguel/eB2/datos_VQVAE/base_completa/example_payload.csv"
+    model_route = '/Users/mmsanz/Desktop/Miguel/eB2/progreso_VQVAE/scripts/model'
+    data_route = "/Users/mmsanz/Desktop/Miguel/eB2/datos_VQVAE/base_completa/payload_vqvae_completo.csv"
 
     hyperparameters = {
         # General
@@ -56,7 +56,7 @@ def main():
         "valid_percentage": 0.15,
 
         # Training
-        "num_epochs_vqvae": 5000,
+        "num_epochs_vqvae": 2, #5000,
         "step_size_vqvae": 150,
         "gamma_vqvae": 1,
         "lr_vqvae": 0.0001,

@@ -1,0 +1,2462 @@
+Test Subset Metrics and Losses:
+Mean Test Reconstruction Loss (XO): 4.0162
+Mean Test Real-Valued Reconstruction Loss (XO): 0.7152
+Mean Test Positive Reconstruction Loss (XO): 2.5469
+Mean Test Binary Reconstruction Loss (XO): 0.7541
+
+Mean Test Reconstruction Loss (XSM): 1.8426
+Mean Test Real-Valued Reconstruction Loss (XSM): 0.0022
+Mean Test Positive Reconstruction Loss (XSM): 1.1047
+Mean Test Binary Reconstruction Loss (XSM): 0.7357
+
+Per Variable Test Reconstruction Losses (XO):
+  Variable Sleep Start: 0.7152
+  Variable Location Distance: 0.7575
+  Variable Location Time Home: 1.1255
+  Variable Sleep Duration: 1.5076
+  Variable Activity Walking: 0.3409
+  Variable App Usage Total: 0.5065
+  Variable Location Clusters Count: 0.1811
+  Variable Steps Steps Total: 0.3228
+  Variable Weekend: 0.9850
+  Variable Practiced Sport: 0.8313
+  Variable Steps 0: 5.8353
+  Variable Steps 1: 5.1712
+  Variable Steps 2: 4.5600
+  Variable Steps 3: 3.9599
+  Variable Steps 4: 3.0695
+  Variable Steps 5: 2.7037
+  Variable Steps 6: 2.3749
+  Variable Steps 7: 1.9547
+  Variable Steps 8: 1.3805
+  Variable Steps 9: 1.0959
+  Variable Steps 10: 1.0272
+  Variable Steps 11: 0.9413
+  Variable Steps 12: 0.8538
+  Variable Steps 13: 1.3598
+  Variable Steps 14: 3.6105
+  Variable Steps 15: 4.1436
+  Variable Steps 16: 10.7202
+  Variable Steps 17: 0.4815
+  Variable Steps 18: 0.6499
+  Variable Steps 19: 0.3138
+  Variable Steps 20: 0.4531
+  Variable Steps 21: 0.2455
+  Variable Steps 22: 0.7193
+  Variable Steps 23: 0.4202
+  Variable Steps 24: 0.3055
+  Variable Steps 25: 0.5245
+  Variable Steps 26: 0.4332
+  Variable Steps 27: 0.4187
+  Variable Steps 28: 0.7391
+  Variable Steps 29: 0.9361
+  Variable Steps 30: 0.7005
+  Variable Steps 31: 0.7776
+  Variable Steps 32: 0.7998
+  Variable Steps 33: 1.1415
+  Variable Steps 34: 1.3525
+  Variable Steps 35: 1.0203
+  Variable Steps 36: 0.8631
+  Variable Steps 37: 0.7328
+  Variable Steps 38: 0.7749
+  Variable Steps 39: 0.6282
+  Variable Steps 40: 0.8998
+  Variable Steps 41: 0.9139
+  Variable Steps 42: 0.6484
+  Variable Steps 43: 0.8340
+  Variable Steps 44: 0.7643
+  Variable Steps 45: 1.0993
+  Variable Steps 46: 2.2344
+  Variable Steps 47: 7.8466
+  Variable Activity 0: 1.3243
+  Variable Activity 1: 1.9644
+  Variable Activity 2: 35.8197
+  Variable Activity 3: 32.9090
+  Variable Activity 4: 33.0510
+  Variable Activity 5: 33.7466
+  Variable Activity 6: 27.3051
+  Variable Activity 7: 24.4188
+  Variable Activity 8: 21.8438
+  Variable Activity 9: 25.1470
+  Variable Activity 10: 35.7608
+  Variable Activity 11: 23.6073
+  Variable Activity 12: 23.6236
+  Variable Activity 13: 27.5799
+  Variable Activity 14: 27.2695
+  Variable Activity 15: 1.2777
+  Variable Activity 16: 1.4963
+  Variable Activity 17: 0.2347
+  Variable Activity 18: 0.1952
+  Variable Activity 19: 0.1648
+  Variable Activity 20: 0.1023
+  Variable Activity 21: 0.1556
+  Variable Activity 22: 0.1007
+  Variable Activity 23: 0.0779
+  Variable Activity 24: 0.0844
+  Variable Activity 25: 0.0769
+  Variable Activity 26: 0.0404
+  Variable Activity 27: 0.1004
+  Variable Activity 28: 0.0829
+  Variable Activity 29: 0.0929
+  Variable Activity 30: 0.1053
+  Variable Activity 31: 0.2286
+  Variable Activity 32: 0.1749
+  Variable Activity 33: 0.0975
+  Variable Activity 34: 0.1451
+  Variable Activity 35: 0.1051
+  Variable Activity 36: 0.0887
+  Variable Activity 37: 0.0547
+  Variable Activity 38: 0.0561
+  Variable Activity 39: 0.0753
+  Variable Activity 40: 0.0609
+  Variable Activity 41: 0.1449
+  Variable Activity 42: 0.0936
+  Variable Activity 43: 0.1505
+  Variable Activity 44: 0.1885
+  Variable Activity 45: 1.1468
+  Variable Activity 46: 1.0147
+  Variable Activity 47: 1.2070
+  Variable Time Slots 0: 0.8837
+  Variable Time Slots 1: 0.8612
+  Variable Time Slots 2: 1.1645
+  Variable Time Slots 3: 24.0055
+  Variable Time Slots 4: 22.6847
+  Variable Time Slots 5: 15.9330
+  Variable Time Slots 6: 16.3934
+  Variable Time Slots 7: 11.5711
+  Variable Time Slots 8: 11.3888
+  Variable Time Slots 9: 10.4658
+  Variable Time Slots 10: 8.7912
+  Variable Time Slots 11: 7.9129
+  Variable Time Slots 12: 7.9822
+  Variable Time Slots 13: 11.4259
+  Variable Time Slots 14: 2.6229
+  Variable Time Slots 15: 0.6015
+  Variable Time Slots 16: 0.5894
+  Variable Time Slots 17: 0.3596
+  Variable Time Slots 18: 0.2639
+  Variable Time Slots 19: 0.2703
+  Variable Time Slots 20: 0.2713
+  Variable Time Slots 21: 0.3127
+  Variable Time Slots 22: 0.2567
+  Variable Time Slots 23: 0.2178
+  Variable Time Slots 24: 0.3067
+  Variable Time Slots 25: 0.2760
+  Variable Time Slots 26: 0.2798
+  Variable Time Slots 27: 0.2788
+  Variable Time Slots 28: 0.2241
+  Variable Time Slots 29: 0.1728
+  Variable Time Slots 30: 0.1707
+  Variable Time Slots 31: 0.1510
+  Variable Time Slots 32: 0.1512
+  Variable Time Slots 33: 0.1704
+  Variable Time Slots 34: 0.1363
+  Variable Time Slots 35: 0.1578
+  Variable Time Slots 36: 0.1362
+  Variable Time Slots 37: 0.1503
+  Variable Time Slots 38: 0.1635
+  Variable Time Slots 39: 0.1729
+  Variable Time Slots 40: 0.1674
+  Variable Time Slots 41: 0.1988
+  Variable Time Slots 42: 0.1426
+  Variable Time Slots 43: 0.1942
+  Variable Time Slots 44: 0.1907
+  Variable Time Slots 45: 0.1837
+  Variable Time Slots 46: 0.1738
+  Variable Time Slots 47: 0.1756
+  Variable At Home Raw 0: 0.3944
+  Variable At Home Raw 1: 0.3941
+  Variable At Home Raw 2: 0.3842
+  Variable At Home Raw 3: 0.3843
+  Variable At Home Raw 4: 0.3972
+  Variable At Home Raw 5: 0.3633
+  Variable At Home Raw 6: 0.3778
+  Variable At Home Raw 7: 0.3896
+  Variable At Home Raw 8: 0.3749
+  Variable At Home Raw 9: 0.3842
+  Variable At Home Raw 10: 0.3417
+  Variable At Home Raw 11: 0.3801
+  Variable At Home Raw 12: 0.4547
+  Variable At Home Raw 13: 0.5120
+  Variable At Home Raw 14: 0.5443
+  Variable At Home Raw 15: 0.5969
+  Variable At Home Raw 16: 0.6519
+  Variable At Home Raw 17: 0.6883
+  Variable At Home Raw 18: 0.6914
+  Variable At Home Raw 19: 0.7452
+  Variable At Home Raw 20: 0.7908
+  Variable At Home Raw 21: 0.8131
+  Variable At Home Raw 22: 0.8540
+  Variable At Home Raw 23: 0.8105
+  Variable At Home Raw 24: 0.8013
+  Variable At Home Raw 25: 0.7898
+  Variable At Home Raw 26: 0.7749
+  Variable At Home Raw 27: 0.7193
+  Variable At Home Raw 28: 0.6899
+  Variable At Home Raw 29: 0.6303
+  Variable At Home Raw 30: 0.6239
+  Variable At Home Raw 31: 0.5939
+  Variable At Home Raw 32: 0.6240
+  Variable At Home Raw 33: 0.6480
+  Variable At Home Raw 34: 0.6540
+  Variable At Home Raw 35: 0.6509
+  Variable At Home Raw 36: 0.6613
+  Variable At Home Raw 37: 0.6457
+  Variable At Home Raw 38: 0.6324
+  Variable At Home Raw 39: 0.6193
+  Variable At Home Raw 40: 0.5844
+  Variable At Home Raw 41: 0.5627
+  Variable At Home Raw 42: 0.5451
+  Variable At Home Raw 43: 0.5082
+  Variable At Home Raw 44: 0.4979
+  Variable At Home Raw 45: 0.4890
+  Variable At Home Raw 46: 0.4835
+  Variable At Home Raw 47: 0.4686
+  Variable At Work Raw 0: 0.6757
+  Variable At Work Raw 1: 0.6914
+  Variable At Work Raw 2: 0.7069
+  Variable At Work Raw 3: 0.6687
+  Variable At Work Raw 4: 0.6485
+  Variable At Work Raw 5: 0.6639
+  Variable At Work Raw 6: 0.8971
+  Variable At Work Raw 7: 0.9616
+  Variable At Work Raw 8: 0.7038
+  Variable At Work Raw 9: 0.6947
+  Variable At Work Raw 10: 0.7289
+  Variable At Work Raw 11: 0.6532
+  Variable At Work Raw 12: 0.6927
+  Variable At Work Raw 13: 0.6937
+  Variable At Work Raw 14: 0.7295
+  Variable At Work Raw 15: 0.8063
+  Variable At Work Raw 16: 0.7081
+  Variable At Work Raw 17: 0.7990
+  Variable At Work Raw 18: 0.7255
+  Variable At Work Raw 19: 0.7736
+  Variable At Work Raw 20: 0.8532
+  Variable At Work Raw 21: 0.8671
+  Variable At Work Raw 22: 0.8068
+  Variable At Work Raw 23: 0.7973
+  Variable At Work Raw 24: 0.8116
+  Variable At Work Raw 25: 0.8190
+  Variable At Work Raw 26: 0.8007
+  Variable At Work Raw 27: 0.8681
+  Variable At Work Raw 28: 1.1879
+  Variable At Work Raw 29: 1.4689
+  Variable At Work Raw 30: 1.3732
+  Variable At Work Raw 31: 1.3273
+  Variable At Work Raw 32: 1.7213
+  Variable At Work Raw 33: 1.5031
+  Variable At Work Raw 34: 1.8500
+  Variable At Work Raw 35: 1.4507
+  Variable At Work Raw 36: 1.0111
+  Variable At Work Raw 37: 1.4222
+  Variable At Work Raw 38: 1.0514
+  Variable At Work Raw 39: 1.0320
+  Variable At Work Raw 40: 0.9481
+  Variable At Work Raw 41: 0.8906
+  Variable At Work Raw 42: 0.6848
+  Variable At Work Raw 43: 0.9111
+  Variable At Work Raw 44: 0.8831
+  Variable At Work Raw 45: 0.8971
+  Variable At Work Raw 46: 0.6723
+  Variable At Work Raw 47: 0.9370
+
+Per Variable Test Reconstruction Losses (XSM):
+  Variable Sleep Start: 0.5395
+  Variable Location Distance: 0.3163
+  Variable Location Time Home: 1.2937
+  Variable Sleep Duration: 0.9536
+  Variable Activity Walking: 0.3464
+  Variable App Usage Total: 0.4116
+  Variable Location Clusters Count: 0.1366
+  Variable Steps Steps Total: 0.4310
+  Variable Weekend: 0.9830
+  Variable Practiced Sport: 0.8277
+  Variable Steps 0: 6.5535
+  Variable Steps 1: 5.7834
+  Variable Steps 2: 5.0368
+  Variable Steps 3: 3.6289
+  Variable Steps 4: 3.4380
+  Variable Steps 5: 3.1466
+  Variable Steps 6: 2.7005
+  Variable Steps 7: 1.2451
+  Variable Steps 8: 1.2915
+  Variable Steps 9: 1.1511
+  Variable Steps 10: 1.5188
+  Variable Steps 11: 1.5211
+  Variable Steps 12: 1.4635
+  Variable Steps 13: 0.6747
+  Variable Steps 14: 5.3195
+  Variable Steps 15: 4.7723
+  Variable Steps 16: 14.7151
+  Variable Steps 17: 0.3040
+  Variable Steps 18: 0.9141
+  Variable Steps 19: 0.1261
+  Variable Steps 20: 0.4871
+  Variable Steps 21: 0.2438
+  Variable Steps 22: 0.6354
+  Variable Steps 23: 0.5140
+  Variable Steps 24: 0.3198
+  Variable Steps 25: 0.4622
+  Variable Steps 26: 0.4164
+  Variable Steps 27: 0.5305
+  Variable Steps 28: 0.9666
+  Variable Steps 29: 0.9857
+  Variable Steps 30: 0.7221
+  Variable Steps 31: 1.0989
+  Variable Steps 32: 0.8608
+  Variable Steps 33: 1.3054
+  Variable Steps 34: 1.2549
+  Variable Steps 35: 1.0225
+  Variable Steps 36: 0.7703
+  Variable Steps 37: 0.7928
+  Variable Steps 38: 0.5481
+  Variable Steps 39: 0.9331
+  Variable Steps 40: 0.9748
+  Variable Steps 41: 0.6882
+  Variable Steps 42: 0.5493
+  Variable Steps 43: 0.8123
+  Variable Steps 44: 0.9584
+  Variable Steps 45: 1.1285
+  Variable Steps 46: 2.0736
+  Variable Steps 47: 7.5516
+  Variable Activity 0: 1.7338
+  Variable Activity 1: 0.0000
+  Variable Activity 2: 0.0000
+  Variable Activity 3: 0.0000
+  Variable Activity 4: 0.0000
+  Variable Activity 5: 0.0000
+  Variable Activity 6: 0.0000
+  Variable Activity 7: 0.0000
+  Variable Activity 8: 0.0000
+  Variable Activity 9: 0.0000
+  Variable Activity 10: 0.0000
+  Variable Activity 11: 0.0000
+  Variable Activity 12: 0.0000
+  Variable Activity 13: 0.0000
+  Variable Activity 14: 0.0000
+  Variable Activity 15: 0.0000
+  Variable Activity 16: 1.5071
+  Variable Activity 17: 0.0000
+  Variable Activity 18: 0.1598
+  Variable Activity 19: 0.0000
+  Variable Activity 20: 0.0862
+  Variable Activity 21: 0.5783
+  Variable Activity 22: 0.0515
+  Variable Activity 23: 0.1231
+  Variable Activity 24: 0.1938
+  Variable Activity 25: 0.0543
+  Variable Activity 26: 0.0319
+  Variable Activity 27: 0.0951
+  Variable Activity 28: 0.0573
+  Variable Activity 29: 0.0620
+  Variable Activity 30: 0.0049
+  Variable Activity 31: 0.1374
+  Variable Activity 32: 0.2085
+  Variable Activity 33: 0.1265
+  Variable Activity 34: 0.1326
+  Variable Activity 35: 0.1279
+  Variable Activity 36: 0.0842
+  Variable Activity 37: 0.0434
+  Variable Activity 38: 0.0277
+  Variable Activity 39: 0.0469
+  Variable Activity 40: 0.0687
+  Variable Activity 41: 0.1789
+  Variable Activity 42: 0.0257
+  Variable Activity 43: 0.0000
+  Variable Activity 44: 0.0000
+  Variable Activity 45: 0.0000
+  Variable Activity 46: 0.0000
+  Variable Activity 47: 0.0000
+  Variable Time Slots 0: 0.9566
+  Variable Time Slots 1: 0.7543
+  Variable Time Slots 2: 1.1549
+  Variable Time Slots 3: 22.2582
+  Variable Time Slots 4: 17.4736
+  Variable Time Slots 5: 22.6565
+  Variable Time Slots 6: 15.9823
+  Variable Time Slots 7: 16.8304
+  Variable Time Slots 8: 13.4699
+  Variable Time Slots 9: 12.1204
+  Variable Time Slots 10: 9.2632
+  Variable Time Slots 11: 7.4410
+  Variable Time Slots 12: 9.3055
+  Variable Time Slots 13: 11.7766
+  Variable Time Slots 14: 2.5660
+  Variable Time Slots 15: 0.5145
+  Variable Time Slots 16: 0.6186
+  Variable Time Slots 17: 0.3616
+  Variable Time Slots 18: 0.2905
+  Variable Time Slots 19: 0.2648
+  Variable Time Slots 20: 0.2763
+  Variable Time Slots 21: 0.2784
+  Variable Time Slots 22: 0.2483
+  Variable Time Slots 23: 0.2176
+  Variable Time Slots 24: 0.2621
+  Variable Time Slots 25: 0.2738
+  Variable Time Slots 26: 0.2664
+  Variable Time Slots 27: 0.3351
+  Variable Time Slots 28: 0.1908
+  Variable Time Slots 29: 0.1646
+  Variable Time Slots 30: 0.1433
+  Variable Time Slots 31: 0.1516
+  Variable Time Slots 32: 0.1713
+  Variable Time Slots 33: 0.1568
+  Variable Time Slots 34: 0.1765
+  Variable Time Slots 35: 0.1566
+  Variable Time Slots 36: 0.1448
+  Variable Time Slots 37: 0.1410
+  Variable Time Slots 38: 0.1911
+  Variable Time Slots 39: 0.1848
+  Variable Time Slots 40: 0.1756
+  Variable Time Slots 41: 0.1165
+  Variable Time Slots 42: 0.1319
+  Variable Time Slots 43: 0.1521
+  Variable Time Slots 44: 0.1589
+  Variable Time Slots 45: 0.1744
+  Variable Time Slots 46: 0.1652
+  Variable Time Slots 47: 0.1639
+  Variable At Home Raw 0: 0.4132
+  Variable At Home Raw 1: 0.3763
+  Variable At Home Raw 2: 0.3897
+  Variable At Home Raw 3: 0.3908
+  Variable At Home Raw 4: 0.3645
+  Variable At Home Raw 5: 0.3940
+  Variable At Home Raw 6: 0.3823
+  Variable At Home Raw 7: 0.3711
+  Variable At Home Raw 8: 0.3608
+  Variable At Home Raw 9: 0.3945
+  Variable At Home Raw 10: 0.4101
+  Variable At Home Raw 11: 0.3609
+  Variable At Home Raw 12: 0.4268
+  Variable At Home Raw 13: 0.5023
+  Variable At Home Raw 14: 0.5338
+  Variable At Home Raw 15: 0.5649
+  Variable At Home Raw 16: 0.6627
+  Variable At Home Raw 17: 0.6970
+  Variable At Home Raw 18: 0.6918
+  Variable At Home Raw 19: 0.7454
+  Variable At Home Raw 20: 0.7919
+  Variable At Home Raw 21: 0.7882
+  Variable At Home Raw 22: 0.8449
+  Variable At Home Raw 23: 0.7987
+  Variable At Home Raw 24: 0.8703
+  Variable At Home Raw 25: 0.7750
+  Variable At Home Raw 26: 0.7838
+  Variable At Home Raw 27: 0.7165
+  Variable At Home Raw 28: 0.6899
+  Variable At Home Raw 29: 0.6392
+  Variable At Home Raw 30: 0.6254
+  Variable At Home Raw 31: 0.5858
+  Variable At Home Raw 32: 0.6340
+  Variable At Home Raw 33: 0.6492
+  Variable At Home Raw 34: 0.6502
+  Variable At Home Raw 35: 0.6483
+  Variable At Home Raw 36: 0.6635
+  Variable At Home Raw 37: 0.6429
+  Variable At Home Raw 38: 0.6344
+  Variable At Home Raw 39: 0.6170
+  Variable At Home Raw 40: 0.5934
+  Variable At Home Raw 41: 0.5710
+  Variable At Home Raw 42: 0.5052
+  Variable At Home Raw 43: 0.5251
+  Variable At Home Raw 44: 0.4778
+  Variable At Home Raw 45: 0.4954
+  Variable At Home Raw 46: 0.5058
+  Variable At Home Raw 47: 0.4880
+  Variable At Work Raw 0: 0.6758
+  Variable At Work Raw 1: 0.6912
+  Variable At Work Raw 2: 0.7071
+  Variable At Work Raw 3: 0.6684
+  Variable At Work Raw 4: 0.6484
+  Variable At Work Raw 5: 0.6640
+  Variable At Work Raw 6: 0.6977
+  Variable At Work Raw 7: 0.7303
+  Variable At Work Raw 8: 0.7035
+  Variable At Work Raw 9: 0.6953
+  Variable At Work Raw 10: 0.7287
+  Variable At Work Raw 11: 0.6531
+  Variable At Work Raw 12: 0.6924
+  Variable At Work Raw 13: 0.6937
+  Variable At Work Raw 14: 0.7297
+  Variable At Work Raw 15: 0.7218
+  Variable At Work Raw 16: 0.8757
+  Variable At Work Raw 17: 0.7089
+  Variable At Work Raw 18: 0.8944
+  Variable At Work Raw 19: 0.8711
+  Variable At Work Raw 20: 0.6715
+  Variable At Work Raw 21: 0.6990
+  Variable At Work Raw 22: 0.7139
+  Variable At Work Raw 23: 0.7111
+  Variable At Work Raw 24: 0.7219
+  Variable At Work Raw 25: 0.9418
+  Variable At Work Raw 26: 0.9181
+  Variable At Work Raw 27: 1.2926
+  Variable At Work Raw 28: 1.3560
+  Variable At Work Raw 29: 1.4298
+  Variable At Work Raw 30: 1.4014
+  Variable At Work Raw 31: 1.1894
+  Variable At Work Raw 32: 0.6713
+  Variable At Work Raw 33: 2.1195
+  Variable At Work Raw 34: 0.6943
+  Variable At Work Raw 35: 1.7272
+  Variable At Work Raw 36: 2.2111
+  Variable At Work Raw 37: 0.7078
+  Variable At Work Raw 38: 0.6740
+  Variable At Work Raw 39: 0.7191
+  Variable At Work Raw 40: 0.6821
+  Variable At Work Raw 41: 0.6796
+  Variable At Work Raw 42: 1.3411
+  Variable At Work Raw 43: 0.7126
+  Variable At Work Raw 44: 0.6678
+  Variable At Work Raw 45: 0.7043
+  Variable At Work Raw 46: 1.1331
+  Variable At Work Raw 47: 0.7010
+
+Test Metrics:
+  Variable Sleep Start:
+    mse_xo: 58651524.0000
+    rmse_xo: 7658.4282
+    mae_xo: 6266.6802
+    mse_xsm: 44241164.0000
+    rmse_xsm: 6651.4033
+    mae_xsm: 5272.2539
+  Variable Location Distance:
+    mse_xo: 237316928.0000
+    rmse_xo: 15405.0938
+    mae_xo: 9882.2656
+    mse_xsm: 63209280.0000
+    rmse_xsm: 7950.4263
+    mae_xsm: 6813.6396
+  Variable Location Time Home:
+    mse_xo: 132633.9375
+    rmse_xo: 364.1894
+    mae_xo: 280.3282
+    mse_xsm: 145081.3594
+    rmse_xsm: 380.8955
+    mae_xsm: 303.2419
+  Variable Sleep Duration:
+    mse_xo: 105566168.0000
+    rmse_xo: 10274.5400
+    mae_xo: 8516.9736
+    mse_xsm: 96539144.0000
+    rmse_xsm: 9825.4336
+    mae_xsm: 8521.8467
+  Variable Activity Walking:
+    mse_xo: 10977351.0000
+    rmse_xo: 3313.2085
+    mae_xo: 2502.8730
+    mse_xsm: 10861263.0000
+    rmse_xsm: 3295.6431
+    mae_xsm: 2555.1377
+  Variable App Usage Total:
+    mse_xo: 108792024.0000
+    rmse_xo: 10430.3418
+    mae_xo: 8691.0068
+    mse_xsm: 83009240.0000
+    rmse_xsm: 9110.9404
+    mae_xsm: 7637.7578
+  Variable Location Clusters Count:
+    mse_xo: 0.7131
+    rmse_xo: 0.8445
+    mae_xo: 0.6318
+    mse_xsm: 0.5766
+    rmse_xsm: 0.7593
+    mae_xsm: 0.5529
+  Variable Steps Steps Total:
+    mse_xo: 33832076.0000
+    rmse_xo: 5816.5347
+    mae_xo: 4686.0200
+    mse_xsm: 45001444.0000
+    rmse_xsm: 6708.3115
+    mae_xsm: 5218.5068
+  Variable Weekend:
+    acc_xo: 0.7082
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.7097
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable Practiced Sport:
+    acc_xo: 0.4680
+    prec_xo: 0.4680
+    rec_xo: 1.0000
+    f1_xo: 0.6376
+    acc_xsm: 0.4500
+    prec_xsm: 0.4500
+    rec_xsm: 1.0000
+    f1_xsm: 0.6207
+  Variable Steps 0:
+    mse_xo: 59770.7031
+    rmse_xo: 244.4805
+    mae_xo: 60.6478
+    mse_xsm: 117393.6875
+    rmse_xsm: 342.6276
+    mae_xsm: 92.1058
+  Variable Steps 1:
+    mse_xo: 27301.5137
+    rmse_xo: 165.2317
+    mae_xo: 46.3962
+    mse_xsm: 131217.6094
+    rmse_xsm: 362.2397
+    mae_xsm: 93.9525
+  Variable Steps 2:
+    mse_xo: 15440.9854
+    rmse_xo: 124.2618
+    mae_xo: 37.3048
+    mse_xsm: 97057.9297
+    rmse_xsm: 311.5412
+    mae_xsm: 72.3817
+  Variable Steps 3:
+    mse_xo: 13940.5947
+    rmse_xo: 118.0703
+    mae_xo: 29.8057
+    mse_xsm: 27218.6445
+    rmse_xsm: 164.9807
+    mae_xsm: 39.3197
+  Variable Steps 4:
+    mse_xo: 31412.1113
+    rmse_xo: 177.2346
+    mae_xo: 34.7627
+    mse_xsm: 2027.3580
+    rmse_xsm: 45.0262
+    mae_xsm: 14.7661
+  Variable Steps 5:
+    mse_xo: 19646.1016
+    rmse_xo: 140.1646
+    mae_xo: 26.5884
+    mse_xsm: 29137.9609
+    rmse_xsm: 170.6985
+    mae_xsm: 38.4935
+  Variable Steps 6:
+    mse_xo: 4979.5195
+    rmse_xo: 70.5657
+    mae_xo: 14.7249
+    mse_xsm: 4981.3286
+    rmse_xsm: 70.5785
+    mae_xsm: 18.6389
+  Variable Steps 7:
+    mse_xo: 2586.1497
+    rmse_xo: 50.8542
+    mae_xo: 10.4209
+    mse_xsm: 1759.1616
+    rmse_xsm: 41.9424
+    mae_xsm: 7.7543
+  Variable Steps 8:
+    mse_xo: 967.8109
+    rmse_xo: 31.1097
+    mae_xo: 6.8675
+    mse_xsm: 575.5042
+    rmse_xsm: 23.9897
+    mae_xsm: 4.9658
+  Variable Steps 9:
+    mse_xo: 3943.0449
+    rmse_xo: 62.7937
+    mae_xo: 8.8892
+    mse_xsm: 342.8492
+    rmse_xsm: 18.5162
+    mae_xsm: 4.1396
+  Variable Steps 10:
+    mse_xo: 1269.6671
+    rmse_xo: 35.6324
+    mae_xo: 5.6721
+    mse_xsm: 9776.2656
+    rmse_xsm: 98.8750
+    mae_xsm: 17.8147
+  Variable Steps 11:
+    mse_xo: 9378.9062
+    rmse_xo: 96.8448
+    mae_xo: 13.4866
+    mse_xsm: 15834.9551
+    rmse_xsm: 125.8370
+    mae_xsm: 20.5217
+  Variable Steps 12:
+    mse_xo: 7489.8027
+    rmse_xo: 86.5436
+    mae_xo: 10.0830
+    mse_xsm: 2949.9775
+    rmse_xsm: 54.3137
+    mae_xsm: 10.2280
+  Variable Steps 13:
+    mse_xo: 15916.3887
+    rmse_xo: 126.1602
+    mae_xo: 16.0964
+    mse_xsm: 140.6795
+    rmse_xsm: 11.8608
+    mae_xsm: 2.1482
+  Variable Steps 14:
+    mse_xo: 14345.8535
+    rmse_xo: 119.7742
+    mae_xo: 26.3598
+    mse_xsm: 8219.3027
+    rmse_xsm: 90.6604
+    mae_xsm: 32.6267
+  Variable Steps 15:
+    mse_xo: 2119.0669
+    rmse_xo: 46.0333
+    mae_xo: 18.4053
+    mse_xsm: 19771.0703
+    rmse_xsm: 140.6096
+    mae_xsm: 38.7485
+  Variable Steps 16:
+    mse_xo: 446423.5938
+    rmse_xo: 668.1494
+    mae_xo: 280.1574
+    mse_xsm: 663096.1875
+    rmse_xsm: 814.3072
+    mae_xsm: 414.4977
+  Variable Steps 17:
+    mse_xo: 38322.8789
+    rmse_xo: 195.7623
+    mae_xo: 37.1343
+    mse_xsm: 1709.8616
+    rmse_xsm: 41.3505
+    mae_xsm: 9.1074
+  Variable Steps 18:
+    mse_xo: 80991.7734
+    rmse_xo: 284.5905
+    mae_xo: 83.2913
+    mse_xsm: 138587.3281
+    rmse_xsm: 372.2732
+    mae_xsm: 127.2141
+  Variable Steps 19:
+    mse_xo: 29293.8145
+    rmse_xo: 171.1544
+    mae_xo: 40.7749
+    mse_xsm: 9245.5068
+    rmse_xsm: 96.1536
+    mae_xsm: 14.8487
+  Variable Steps 20:
+    mse_xo: 35099.7148
+    rmse_xo: 187.3492
+    mae_xo: 66.2868
+    mse_xsm: 67162.7031
+    rmse_xsm: 259.1577
+    mae_xsm: 86.2166
+  Variable Steps 21:
+    mse_xo: 108245.9922
+    rmse_xo: 329.0076
+    mae_xo: 86.9049
+    mse_xsm: 37295.3086
+    rmse_xsm: 193.1199
+    mae_xsm: 60.7788
+  Variable Steps 22:
+    mse_xo: 271586.2188
+    rmse_xo: 521.1393
+    mae_xo: 256.4575
+    mse_xsm: 295369.4062
+    rmse_xsm: 543.4790
+    mae_xsm: 254.2352
+  Variable Steps 23:
+    mse_xo: 176783.1406
+    rmse_xo: 420.4559
+    mae_xo: 157.9313
+    mse_xsm: 260713.5625
+    rmse_xsm: 510.6012
+    mae_xsm: 212.1729
+  Variable Steps 24:
+    mse_xo: 122142.4375
+    rmse_xo: 349.4888
+    mae_xo: 106.0390
+    mse_xsm: 98600.5078
+    rmse_xsm: 314.0072
+    mae_xsm: 102.7020
+  Variable Steps 25:
+    mse_xo: 170167.9062
+    rmse_xo: 412.5141
+    mae_xo: 163.3707
+    mse_xsm: 171393.9844
+    rmse_xsm: 413.9976
+    mae_xsm: 143.1369
+  Variable Steps 26:
+    mse_xo: 98757.3828
+    rmse_xo: 314.2569
+    mae_xo: 117.2771
+    mse_xsm: 98786.4688
+    rmse_xsm: 314.3032
+    mae_xsm: 114.3467
+  Variable Steps 27:
+    mse_xo: 85865.7344
+    rmse_xo: 293.0286
+    mae_xo: 93.1826
+    mse_xsm: 231849.2188
+    rmse_xsm: 481.5072
+    mae_xsm: 165.0771
+  Variable Steps 28:
+    mse_xo: 172223.9219
+    rmse_xo: 414.9987
+    mae_xo: 184.9012
+    mse_xsm: 251768.3438
+    rmse_xsm: 501.7652
+    mae_xsm: 258.1382
+  Variable Steps 29:
+    mse_xo: 369268.1875
+    rmse_xo: 607.6744
+    mae_xo: 283.2671
+    mse_xsm: 339086.0938
+    rmse_xsm: 582.3110
+    mae_xsm: 302.6313
+  Variable Steps 30:
+    mse_xo: 57353.8633
+    rmse_xo: 239.4867
+    mae_xo: 89.4102
+    mse_xsm: 88429.8750
+    rmse_xsm: 297.3716
+    mae_xsm: 111.5705
+  Variable Steps 31:
+    mse_xo: 90586.4688
+    rmse_xo: 300.9759
+    mae_xo: 113.3710
+    mse_xsm: 239780.2656
+    rmse_xsm: 489.6736
+    mae_xsm: 205.4584
+  Variable Steps 32:
+    mse_xo: 196226.6406
+    rmse_xo: 442.9748
+    mae_xo: 160.0219
+    mse_xsm: 223190.0938
+    rmse_xsm: 472.4300
+    mae_xsm: 163.8007
+  Variable Steps 33:
+    mse_xo: 234807.8750
+    rmse_xo: 484.5698
+    mae_xo: 196.6258
+    mse_xsm: 281320.7500
+    rmse_xsm: 530.3968
+    mae_xsm: 244.7482
+  Variable Steps 34:
+    mse_xo: 381990.1875
+    rmse_xo: 618.0535
+    mae_xo: 271.8784
+    mse_xsm: 310090.6875
+    rmse_xsm: 556.8578
+    mae_xsm: 220.4215
+  Variable Steps 35:
+    mse_xo: 298916.1875
+    rmse_xo: 546.7323
+    mae_xo: 240.9230
+    mse_xsm: 293798.7500
+    rmse_xsm: 542.0320
+    mae_xsm: 238.4227
+  Variable Steps 36:
+    mse_xo: 346419.9375
+    rmse_xo: 588.5745
+    mae_xo: 250.0947
+    mse_xsm: 256981.7656
+    rmse_xsm: 506.9337
+    mae_xsm: 211.8322
+  Variable Steps 37:
+    mse_xo: 217844.2969
+    rmse_xo: 466.7379
+    mae_xo: 189.1770
+    mse_xsm: 201621.2969
+    rmse_xsm: 449.0226
+    mae_xsm: 210.3798
+  Variable Steps 38:
+    mse_xo: 234564.5625
+    rmse_xo: 484.3187
+    mae_xo: 195.8209
+    mse_xsm: 35658.3477
+    rmse_xsm: 188.8342
+    mae_xsm: 74.7509
+  Variable Steps 39:
+    mse_xo: 178250.8906
+    rmse_xo: 422.1977
+    mae_xo: 151.4784
+    mse_xsm: 241273.0938
+    rmse_xsm: 491.1956
+    mae_xsm: 216.3552
+  Variable Steps 40:
+    mse_xo: 190420.2812
+    rmse_xo: 436.3717
+    mae_xo: 186.8793
+    mse_xsm: 317092.8750
+    rmse_xsm: 563.1100
+    mae_xsm: 223.6976
+  Variable Steps 41:
+    mse_xo: 274121.0000
+    rmse_xo: 523.5657
+    mae_xo: 196.7180
+    mse_xsm: 88826.4141
+    rmse_xsm: 298.0376
+    mae_xsm: 101.0955
+  Variable Steps 42:
+    mse_xo: 128717.1328
+    rmse_xo: 358.7717
+    mae_xo: 120.2727
+    mse_xsm: 58054.8281
+    rmse_xsm: 240.9457
+    mae_xsm: 78.5416
+  Variable Steps 43:
+    mse_xo: 114284.9453
+    rmse_xo: 338.0606
+    mae_xo: 115.9608
+    mse_xsm: 163739.7812
+    rmse_xsm: 404.6477
+    mae_xsm: 121.8213
+  Variable Steps 44:
+    mse_xo: 85421.8672
+    rmse_xo: 292.2702
+    mae_xo: 87.6490
+    mse_xsm: 131081.9062
+    rmse_xsm: 362.0524
+    mae_xsm: 118.8984
+  Variable Steps 45:
+    mse_xo: 67781.6016
+    rmse_xo: 260.3490
+    mae_xo: 84.1818
+    mse_xsm: 65231.5195
+    rmse_xsm: 255.4046
+    mae_xsm: 85.3643
+  Variable Steps 46:
+    mse_xo: 96259.9062
+    rmse_xo: 310.2578
+    mae_xo: 92.1166
+    mse_xsm: 56730.1211
+    rmse_xsm: 238.1809
+    mae_xsm: 73.2378
+  Variable Steps 47:
+    mse_xo: 87340.5000
+    rmse_xo: 295.5343
+    mae_xo: 81.0548
+    mse_xsm: 65958.8203
+    rmse_xsm: 256.8245
+    mae_xsm: 72.3417
+  Variable Activity 0:
+    mse_xo: 535889.6875
+    rmse_xo: 732.0449
+    mae_xo: 540.6264
+    mse_xsm: 671009.9375
+    rmse_xsm: 819.1520
+    mae_xsm: 819.1520
+  Variable Activity 1:
+    mse_xo: 562133.4375
+    rmse_xo: 749.7556
+    mae_xo: 555.0915
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 2:
+    mse_xo: 553775.4375
+    rmse_xo: 744.1609
+    mae_xo: 585.7584
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 3:
+    mse_xo: 539925.6875
+    rmse_xo: 734.7964
+    mae_xo: 549.1389
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 4:
+    mse_xo: 521516.2500
+    rmse_xo: 722.1608
+    mae_xo: 541.1366
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 5:
+    mse_xo: 406415.0938
+    rmse_xo: 637.5070
+    mae_xo: 494.2781
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 6:
+    mse_xo: 298881.6250
+    rmse_xo: 546.7007
+    mae_xo: 365.0130
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 7:
+    mse_xo: 43083.4023
+    rmse_xo: 207.5654
+    mae_xo: 180.7958
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 8:
+    mse_xo: 52691.4844
+    rmse_xo: 229.5463
+    mae_xo: 168.3053
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 9:
+    mse_xo: 327599.1875
+    rmse_xo: 572.3628
+    mae_xo: 349.7996
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 10:
+    mse_xo: 643262.5625
+    rmse_xo: 802.0365
+    mae_xo: 625.7007
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 11:
+    mse_xo: 213695.6562
+    rmse_xo: 462.2723
+    mae_xo: 299.7114
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 12:
+    mse_xo: 288697.4375
+    rmse_xo: 537.3057
+    mae_xo: 314.4135
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 13:
+    mse_xo: 1475723.2500
+    rmse_xo: 1214.7935
+    mae_xo: 858.9958
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 14:
+    mse_xo: 90892.3672
+    rmse_xo: 301.4836
+    mae_xo: 245.4753
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 15:
+    mse_xo: 129654.7578
+    rmse_xo: 360.0760
+    mae_xo: 227.4009
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 16:
+    mse_xo: 717188.4375
+    rmse_xo: 846.8698
+    mae_xo: 776.5267
+    mse_xsm: 689732.9375
+    rmse_xsm: 830.5016
+    mae_xsm: 776.2905
+  Variable Activity 17:
+    mse_xo: 303289.2188
+    rmse_xo: 550.7170
+    mae_xo: 340.0400
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 18:
+    mse_xo: 428904.0312
+    rmse_xo: 654.9077
+    mae_xo: 489.7228
+    mse_xsm: 130697.4922
+    rmse_xsm: 361.5211
+    mae_xsm: 260.6529
+  Variable Activity 19:
+    mse_xo: 168936.4375
+    rmse_xo: 411.0188
+    mae_xo: 276.0867
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 20:
+    mse_xo: 107135.1172
+    rmse_xo: 327.3150
+    mae_xo: 225.6708
+    mse_xsm: 187203.2031
+    rmse_xsm: 432.6699
+    mae_xsm: 254.6309
+  Variable Activity 21:
+    mse_xo: 500442.0000
+    rmse_xo: 707.4193
+    mae_xo: 499.2959
+    mse_xsm: 14158.9863
+    rmse_xsm: 118.9915
+    mae_xsm: 118.9915
+  Variable Activity 22:
+    mse_xo: 442466.0938
+    rmse_xo: 665.1813
+    mae_xo: 542.7342
+    mse_xsm: 433945.3750
+    rmse_xsm: 658.7453
+    mae_xsm: 540.4617
+  Variable Activity 23:
+    mse_xo: 285751.6250
+    rmse_xo: 534.5574
+    mae_xo: 388.4561
+    mse_xsm: 144427.7969
+    rmse_xsm: 380.0366
+    mae_xsm: 280.8998
+  Variable Activity 24:
+    mse_xo: 363190.9688
+    rmse_xo: 602.6533
+    mae_xo: 462.1192
+    mse_xsm: 305762.3125
+    rmse_xsm: 552.9578
+    mae_xsm: 410.7329
+  Variable Activity 25:
+    mse_xo: 518720.6562
+    rmse_xo: 720.2227
+    mae_xo: 534.3459
+    mse_xsm: 461866.0312
+    rmse_xsm: 679.6072
+    mae_xsm: 506.4397
+  Variable Activity 26:
+    mse_xo: 383216.9375
+    rmse_xo: 619.0452
+    mae_xo: 390.5896
+    mse_xsm: 244170.0000
+    rmse_xsm: 494.1356
+    mae_xsm: 343.6707
+  Variable Activity 27:
+    mse_xo: 465958.0938
+    rmse_xo: 682.6112
+    mae_xo: 511.4651
+    mse_xsm: 821569.5000
+    rmse_xsm: 906.4047
+    mae_xsm: 742.2922
+  Variable Activity 28:
+    mse_xo: 402931.0938
+    rmse_xo: 634.7686
+    mae_xo: 448.7184
+    mse_xsm: 279554.3438
+    rmse_xsm: 528.7290
+    mae_xsm: 344.9893
+  Variable Activity 29:
+    mse_xo: 458956.3438
+    rmse_xo: 677.4632
+    mae_xo: 553.3911
+    mse_xsm: 324297.8750
+    rmse_xsm: 569.4716
+    mae_xsm: 497.6353
+  Variable Activity 30:
+    mse_xo: 252222.1250
+    rmse_xo: 502.2172
+    mae_xo: 317.7080
+    mse_xsm: 800.2555
+    rmse_xsm: 28.2888
+    mae_xsm: 28.2888
+  Variable Activity 31:
+    mse_xo: 476910.2188
+    rmse_xo: 690.5869
+    mae_xo: 520.3539
+    mse_xsm: 229293.7344
+    rmse_xsm: 478.8463
+    mae_xsm: 316.5222
+  Variable Activity 32:
+    mse_xo: 442211.7812
+    rmse_xo: 664.9901
+    mae_xo: 514.0775
+    mse_xsm: 792397.5625
+    rmse_xsm: 890.1672
+    mae_xsm: 662.9541
+  Variable Activity 33:
+    mse_xo: 404591.1250
+    rmse_xo: 636.0748
+    mae_xo: 457.4167
+    mse_xsm: 483790.5938
+    rmse_xsm: 695.5506
+    mae_xsm: 526.6219
+  Variable Activity 34:
+    mse_xo: 669071.8750
+    rmse_xo: 817.9681
+    mae_xo: 657.4131
+    mse_xsm: 729700.5625
+    rmse_xsm: 854.2251
+    mae_xsm: 689.3707
+  Variable Activity 35:
+    mse_xo: 590114.3125
+    rmse_xo: 768.1890
+    mae_xo: 599.4003
+    mse_xsm: 587362.5625
+    rmse_xsm: 766.3958
+    mae_xsm: 584.6354
+  Variable Activity 36:
+    mse_xo: 513251.9375
+    rmse_xo: 716.4160
+    mae_xo: 538.1202
+    mse_xsm: 813060.1875
+    rmse_xsm: 901.6985
+    mae_xsm: 806.3619
+  Variable Activity 37:
+    mse_xo: 343284.0000
+    rmse_xo: 585.9044
+    mae_xo: 415.0020
+    mse_xsm: 387691.1562
+    rmse_xsm: 622.6485
+    mae_xsm: 475.6581
+  Variable Activity 38:
+    mse_xo: 444137.1562
+    rmse_xo: 666.4362
+    mae_xo: 497.9484
+    mse_xsm: 194190.9844
+    rmse_xsm: 440.6711
+    mae_xsm: 372.3311
+  Variable Activity 39:
+    mse_xo: 334218.2188
+    rmse_xo: 578.1161
+    mae_xo: 413.8458
+    mse_xsm: 724698.5625
+    rmse_xsm: 851.2923
+    mae_xsm: 606.1614
+  Variable Activity 40:
+    mse_xo: 358896.5312
+    rmse_xo: 599.0797
+    mae_xo: 440.9353
+    mse_xsm: 645918.1875
+    rmse_xsm: 803.6904
+    mae_xsm: 608.3950
+  Variable Activity 41:
+    mse_xo: 522354.6875
+    rmse_xo: 722.7411
+    mae_xo: 539.6177
+    mse_xsm: 1184471.8750
+    rmse_xsm: 1088.3345
+    mae_xsm: 974.7222
+  Variable Activity 42:
+    mse_xo: 285717.8438
+    rmse_xo: 534.5258
+    mae_xo: 390.0697
+    mse_xsm: 59668.8086
+    rmse_xsm: 244.2720
+    mae_xsm: 165.9896
+  Variable Activity 43:
+    mse_xo: 571170.6875
+    rmse_xo: 755.7584
+    mae_xo: 585.1590
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 44:
+    mse_xo: 585327.8125
+    rmse_xo: 765.0672
+    mae_xo: 572.2968
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 45:
+    mse_xo: 523358.8438
+    rmse_xo: 723.4354
+    mae_xo: 540.7968
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 46:
+    mse_xo: 420776.4688
+    rmse_xo: 648.6729
+    mae_xo: 502.2838
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Activity 47:
+    mse_xo: 441494.3750
+    rmse_xo: 664.4504
+    mae_xo: 484.0523
+    mse_xsm: 0.0000
+    rmse_xsm: 0.0000
+    mae_xsm: 0.0000
+  Variable Time Slots 0:
+    mse_xo: 662438.1875
+    rmse_xo: 813.9031
+    mae_xo: 554.6477
+    mse_xsm: 709850.6250
+    rmse_xsm: 842.5263
+    mae_xsm: 598.9082
+  Variable Time Slots 1:
+    mse_xo: 869784.6875
+    rmse_xo: 932.6225
+    mae_xo: 635.4570
+    mse_xsm: 754572.8750
+    rmse_xsm: 868.6616
+    mae_xsm: 555.3441
+  Variable Time Slots 2:
+    mse_xo: 810821.2500
+    rmse_xo: 900.4561
+    mae_xo: 586.7596
+    mse_xsm: 787408.1250
+    rmse_xsm: 887.3602
+    mae_xsm: 567.9077
+  Variable Time Slots 3:
+    mse_xo: 768461.2500
+    rmse_xo: 876.6192
+    mae_xo: 551.3580
+    mse_xsm: 692050.6875
+    rmse_xsm: 831.8958
+    mae_xsm: 500.9859
+  Variable Time Slots 4:
+    mse_xo: 797675.1250
+    rmse_xo: 893.1266
+    mae_xo: 537.4257
+    mse_xsm: 487729.2188
+    rmse_xsm: 698.3762
+    mae_xsm: 351.1418
+  Variable Time Slots 5:
+    mse_xo: 533868.0000
+    rmse_xo: 730.6627
+    mae_xo: 368.2439
+    mse_xsm: 842878.1250
+    rmse_xsm: 918.0839
+    mae_xsm: 556.4903
+  Variable Time Slots 6:
+    mse_xo: 506422.5312
+    rmse_xo: 711.6337
+    mae_xo: 366.1254
+    mse_xsm: 687267.8750
+    rmse_xsm: 829.0162
+    mae_xsm: 423.4733
+  Variable Time Slots 7:
+    mse_xo: 456494.1562
+    rmse_xo: 675.6435
+    mae_xo: 290.8922
+    mse_xsm: 529331.9375
+    rmse_xsm: 727.5520
+    mae_xsm: 384.8614
+  Variable Time Slots 8:
+    mse_xo: 430519.2500
+    rmse_xo: 656.1396
+    mae_xo: 286.2247
+    mse_xsm: 475422.0312
+    rmse_xsm: 689.5085
+    mae_xsm: 321.3594
+  Variable Time Slots 9:
+    mse_xo: 343394.8438
+    rmse_xo: 585.9990
+    mae_xo: 236.5151
+    mse_xsm: 444864.3125
+    rmse_xsm: 666.9815
+    mae_xsm: 297.9265
+  Variable Time Slots 10:
+    mse_xo: 325640.7188
+    rmse_xo: 570.6494
+    mae_xo: 218.6261
+    mse_xsm: 287846.8125
+    rmse_xsm: 536.5135
+    mae_xsm: 208.8983
+  Variable Time Slots 11:
+    mse_xo: 271993.7500
+    rmse_xo: 521.5302
+    mae_xo: 192.1887
+    mse_xsm: 237417.6406
+    rmse_xsm: 487.2552
+    mae_xsm: 168.8642
+  Variable Time Slots 12:
+    mse_xo: 252056.0000
+    rmse_xo: 502.0518
+    mae_xo: 172.6553
+    mse_xsm: 273383.4062
+    rmse_xsm: 522.8608
+    mae_xsm: 195.1252
+  Variable Time Slots 13:
+    mse_xo: 266497.4688
+    rmse_xo: 516.2339
+    mae_xo: 207.5844
+    mse_xsm: 221920.8750
+    rmse_xsm: 471.0848
+    mae_xsm: 190.7362
+  Variable Time Slots 14:
+    mse_xo: 409279.2188
+    rmse_xo: 639.7493
+    mae_xo: 337.1985
+    mse_xsm: 443980.9688
+    rmse_xsm: 666.3190
+    mae_xsm: 356.0536
+  Variable Time Slots 15:
+    mse_xo: 363713.1875
+    rmse_xo: 603.0864
+    mae_xo: 329.0499
+    mse_xsm: 341366.5000
+    rmse_xsm: 584.2658
+    mae_xsm: 289.7594
+  Variable Time Slots 16:
+    mse_xo: 240284.8281
+    rmse_xo: 490.1886
+    mae_xo: 256.1000
+    mse_xsm: 358413.8750
+    rmse_xsm: 598.6768
+    mae_xsm: 291.6873
+  Variable Time Slots 17:
+    mse_xo: 333143.6875
+    rmse_xo: 577.1860
+    mae_xo: 254.5839
+    mse_xsm: 316185.8125
+    rmse_xsm: 562.3040
+    mae_xsm: 250.4917
+  Variable Time Slots 18:
+    mse_xo: 215195.3438
+    rmse_xo: 463.8915
+    mae_xo: 212.0016
+    mse_xsm: 438532.3750
+    rmse_xsm: 662.2178
+    mae_xsm: 367.4527
+  Variable Time Slots 19:
+    mse_xo: 400328.5938
+    rmse_xo: 632.7153
+    mae_xo: 326.4998
+    mse_xsm: 281751.7188
+    rmse_xsm: 530.8029
+    mae_xsm: 260.0605
+  Variable Time Slots 20:
+    mse_xo: 375330.3438
+    rmse_xo: 612.6421
+    mae_xo: 342.0472
+    mse_xsm: 359508.5625
+    rmse_xsm: 599.5903
+    mae_xsm: 321.3705
+  Variable Time Slots 21:
+    mse_xo: 417626.1562
+    rmse_xo: 646.2400
+    mae_xo: 357.6816
+    mse_xsm: 428630.0000
+    rmse_xsm: 654.6984
+    mae_xsm: 391.8167
+  Variable Time Slots 22:
+    mse_xo: 317815.9062
+    rmse_xo: 563.7516
+    mae_xo: 390.2483
+    mse_xsm: 426802.3750
+    rmse_xsm: 653.3011
+    mae_xsm: 455.1890
+  Variable Time Slots 23:
+    mse_xo: 428662.9375
+    rmse_xo: 654.7236
+    mae_xo: 410.2753
+    mse_xsm: 485522.0625
+    rmse_xsm: 696.7941
+    mae_xsm: 453.7613
+  Variable Time Slots 24:
+    mse_xo: 467821.0938
+    rmse_xo: 683.9745
+    mae_xo: 473.8984
+    mse_xsm: 464512.0000
+    rmse_xsm: 681.5511
+    mae_xsm: 464.0764
+  Variable Time Slots 25:
+    mse_xo: 462616.4062
+    rmse_xo: 680.1591
+    mae_xo: 453.0504
+    mse_xsm: 425849.8125
+    rmse_xsm: 652.5717
+    mae_xsm: 424.5373
+  Variable Time Slots 26:
+    mse_xo: 450873.7500
+    rmse_xo: 671.4713
+    mae_xo: 460.0840
+    mse_xsm: 408801.4688
+    rmse_xsm: 639.3759
+    mae_xsm: 408.8365
+  Variable Time Slots 27:
+    mse_xo: 396789.7500
+    rmse_xo: 629.9125
+    mae_xo: 449.5841
+    mse_xsm: 351102.0000
+    rmse_xsm: 592.5386
+    mae_xsm: 436.7538
+  Variable Time Slots 28:
+    mse_xo: 358975.4375
+    rmse_xo: 599.1456
+    mae_xo: 441.4276
+    mse_xsm: 435608.8125
+    rmse_xsm: 660.0067
+    mae_xsm: 469.5790
+  Variable Time Slots 29:
+    mse_xo: 526753.4375
+    rmse_xo: 725.7778
+    mae_xo: 527.9291
+    mse_xsm: 563115.1875
+    rmse_xsm: 750.4100
+    mae_xsm: 573.0447
+  Variable Time Slots 30:
+    mse_xo: 872638.3125
+    rmse_xo: 934.1511
+    mae_xo: 724.5379
+    mse_xsm: 791147.3750
+    rmse_xsm: 889.4647
+    mae_xsm: 692.5892
+  Variable Time Slots 31:
+    mse_xo: 761901.2500
+    rmse_xo: 872.8696
+    mae_xo: 680.4874
+    mse_xsm: 848707.1875
+    rmse_xsm: 921.2531
+    mae_xsm: 718.7259
+  Variable Time Slots 32:
+    mse_xo: 650143.0000
+    rmse_xo: 806.3145
+    mae_xo: 597.0577
+    mse_xsm: 737545.0625
+    rmse_xsm: 858.8044
+    mae_xsm: 662.0917
+  Variable Time Slots 33:
+    mse_xo: 607278.3125
+    rmse_xo: 779.2806
+    mae_xo: 579.3640
+    mse_xsm: 618154.8125
+    rmse_xsm: 786.2282
+    mae_xsm: 580.8739
+  Variable Time Slots 34:
+    mse_xo: 665023.8125
+    rmse_xo: 815.4899
+    mae_xo: 592.0980
+    mse_xsm: 579065.1875
+    rmse_xsm: 760.9633
+    mae_xsm: 550.5599
+  Variable Time Slots 35:
+    mse_xo: 427878.8750
+    rmse_xo: 654.1245
+    mae_xo: 468.4589
+    mse_xsm: 527554.0625
+    rmse_xsm: 726.3292
+    mae_xsm: 536.6453
+  Variable Time Slots 36:
+    mse_xo: 516237.9062
+    rmse_xo: 718.4969
+    mae_xo: 514.0342
+    mse_xsm: 412637.9688
+    rmse_xsm: 642.3690
+    mae_xsm: 474.0145
+  Variable Time Slots 37:
+    mse_xo: 479533.7188
+    rmse_xo: 692.4837
+    mae_xo: 498.6324
+    mse_xsm: 593914.8125
+    rmse_xsm: 770.6587
+    mae_xsm: 540.7791
+  Variable Time Slots 38:
+    mse_xo: 539562.5625
+    rmse_xo: 734.5492
+    mae_xo: 530.4905
+    mse_xsm: 477929.8750
+    rmse_xsm: 691.3247
+    mae_xsm: 470.5524
+  Variable Time Slots 39:
+    mse_xo: 568206.2500
+    rmse_xo: 753.7946
+    mae_xo: 529.7253
+    mse_xsm: 488169.2188
+    rmse_xsm: 698.6911
+    mae_xsm: 490.0225
+  Variable Time Slots 40:
+    mse_xo: 459478.3750
+    rmse_xo: 677.8483
+    mae_xo: 495.2745
+    mse_xsm: 481243.6875
+    rmse_xsm: 693.7173
+    mae_xsm: 508.3138
+  Variable Time Slots 41:
+    mse_xo: 638315.5625
+    rmse_xo: 798.9465
+    mae_xo: 576.3750
+    mse_xsm: 472987.7188
+    rmse_xsm: 687.7410
+    mae_xsm: 487.7866
+  Variable Time Slots 42:
+    mse_xo: 593237.5000
+    rmse_xo: 770.2191
+    mae_xo: 567.2422
+    mse_xsm: 417185.0312
+    rmse_xsm: 645.8986
+    mae_xsm: 465.2144
+  Variable Time Slots 43:
+    mse_xo: 354654.0625
+    rmse_xo: 595.5284
+    mae_xo: 459.4092
+    mse_xsm: 364354.2188
+    rmse_xsm: 603.6176
+    mae_xsm: 472.3620
+  Variable Time Slots 44:
+    mse_xo: 336680.8438
+    rmse_xo: 580.2421
+    mae_xo: 464.8422
+    mse_xsm: 468696.6250
+    rmse_xsm: 684.6142
+    mae_xsm: 576.4690
+  Variable Time Slots 45:
+    mse_xo: 518348.0938
+    rmse_xo: 719.9639
+    mae_xo: 566.1807
+    mse_xsm: 506336.1562
+    rmse_xsm: 711.5730
+    mae_xsm: 559.2413
+  Variable Time Slots 46:
+    mse_xo: 769160.1875
+    rmse_xo: 877.0178
+    mae_xo: 639.3702
+    mse_xsm: 694342.6250
+    rmse_xsm: 833.2722
+    mae_xsm: 593.0660
+  Variable Time Slots 47:
+    mse_xo: 831627.4375
+    rmse_xo: 911.9361
+    mae_xo: 679.6228
+    mse_xsm: 856632.7500
+    rmse_xsm: 925.5446
+    mae_xsm: 709.2708
+  Variable At Home Raw 0:
+    acc_xo: 0.7500
+    prec_xo: 0.7500
+    rec_xo: 1.0000
+    f1_xo: 0.8571
+    acc_xsm: 0.7069
+    prec_xsm: 0.7069
+    rec_xsm: 1.0000
+    f1_xsm: 0.8283
+  Variable At Home Raw 1:
+    acc_xo: 0.7068
+    prec_xo: 0.7231
+    rec_xo: 0.9691
+    f1_xo: 0.8282
+    acc_xsm: 0.7544
+    prec_xsm: 0.7679
+    rec_xsm: 0.9773
+    f1_xsm: 0.8600
+  Variable At Home Raw 2:
+    acc_xo: 0.7385
+    prec_xo: 0.7480
+    rec_xo: 0.9794
+    f1_xo: 0.8482
+    acc_xsm: 0.6833
+    prec_xsm: 0.7273
+    rec_xsm: 0.9091
+    f1_xsm: 0.8081
+  Variable At Home Raw 3:
+    acc_xo: 0.7578
+    prec_xo: 0.7578
+    rec_xo: 1.0000
+    f1_xo: 0.8622
+    acc_xsm: 0.7419
+    prec_xsm: 0.7419
+    rec_xsm: 1.0000
+    f1_xsm: 0.8519
+  Variable At Home Raw 4:
+    acc_xo: 0.2720
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.1846
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 5:
+    acc_xo: 0.7846
+    prec_xo: 0.7846
+    rec_xo: 1.0000
+    f1_xo: 0.8793
+    acc_xsm: 0.7167
+    prec_xsm: 0.7167
+    rec_xsm: 1.0000
+    f1_xsm: 0.8350
+  Variable At Home Raw 6:
+    acc_xo: 0.2536
+    prec_xo: 0.7500
+    rec_xo: 0.0286
+    f1_xo: 0.0550
+    acc_xsm: 0.2500
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 7:
+    acc_xo: 0.5669
+    prec_xo: 0.7273
+    rec_xo: 0.6737
+    f1_xo: 0.6995
+    acc_xsm: 0.5714
+    prec_xsm: 0.7556
+    rec_xsm: 0.6800
+    f1_xsm: 0.7158
+  Variable At Home Raw 8:
+    acc_xo: 0.7537
+    prec_xo: 0.7537
+    rec_xo: 1.0000
+    f1_xo: 0.8596
+    acc_xsm: 0.8036
+    prec_xsm: 0.8000
+    rec_xsm: 1.0000
+    f1_xsm: 0.8889
+  Variable At Home Raw 9:
+    acc_xo: 0.2385
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.2667
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 10:
+    acc_xo: 0.7714
+    prec_xo: 0.7714
+    rec_xo: 1.0000
+    f1_xo: 0.8710
+    acc_xsm: 0.6279
+    prec_xsm: 0.6279
+    rec_xsm: 1.0000
+    f1_xsm: 0.7714
+  Variable At Home Raw 11:
+    acc_xo: 0.7168
+    prec_xo: 0.7168
+    rec_xo: 1.0000
+    f1_xo: 0.8351
+    acc_xsm: 0.7561
+    prec_xsm: 0.7561
+    rec_xsm: 1.0000
+    f1_xsm: 0.8611
+  Variable At Home Raw 12:
+    acc_xo: 0.3611
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.2807
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 13:
+    acc_xo: 0.4359
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4038
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 14:
+    acc_xo: 0.4874
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4490
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 15:
+    acc_xo: 0.4174
+    prec_xo: 0.4211
+    rec_xo: 0.9796
+    f1_xo: 0.5890
+    acc_xsm: 0.5636
+    prec_xsm: 0.5636
+    rec_xsm: 1.0000
+    f1_xsm: 0.7209
+  Variable At Home Raw 16:
+    acc_xo: 0.4530
+    prec_xo: 0.4530
+    rec_xo: 1.0000
+    f1_xo: 0.6235
+    acc_xsm: 0.3684
+    prec_xsm: 0.3684
+    rec_xsm: 1.0000
+    f1_xsm: 0.5385
+  Variable At Home Raw 17:
+    acc_xo: 0.4492
+    prec_xo: 0.4492
+    rec_xo: 1.0000
+    f1_xo: 0.6199
+    acc_xsm: 0.3448
+    prec_xsm: 0.3448
+    rec_xsm: 1.0000
+    f1_xsm: 0.5128
+  Variable At Home Raw 18:
+    acc_xo: 0.4262
+    prec_xo: 0.4262
+    rec_xo: 1.0000
+    f1_xo: 0.5977
+    acc_xsm: 0.4068
+    prec_xsm: 0.4068
+    rec_xsm: 1.0000
+    f1_xsm: 0.5783
+  Variable At Home Raw 19:
+    acc_xo: 0.5938
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.5926
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 20:
+    acc_xo: 0.3788
+    prec_xo: 0.3788
+    rec_xo: 1.0000
+    f1_xo: 0.5495
+    acc_xsm: 0.3846
+    prec_xsm: 0.3846
+    rec_xsm: 1.0000
+    f1_xsm: 0.5556
+  Variable At Home Raw 21:
+    acc_xo: 0.5873
+    prec_xo: 0.4000
+    rec_xo: 0.0392
+    f1_xo: 0.0714
+    acc_xsm: 0.6610
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 22:
+    acc_xo: 0.4000
+    prec_xo: 0.4000
+    rec_xo: 1.0000
+    f1_xo: 0.5714
+    acc_xsm: 0.3729
+    prec_xsm: 0.3729
+    rec_xsm: 1.0000
+    f1_xsm: 0.5432
+  Variable At Home Raw 23:
+    acc_xo: 0.6142
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.6491
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 24:
+    acc_xo: 0.6691
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4783
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 25:
+    acc_xo: 0.4412
+    prec_xo: 0.4444
+    rec_xo: 0.9836
+    f1_xo: 0.6122
+    acc_xsm: 0.3958
+    prec_xsm: 0.3830
+    rec_xsm: 1.0000
+    f1_xsm: 0.5538
+  Variable At Home Raw 26:
+    acc_xo: 0.5476
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.5000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 27:
+    acc_xo: 0.4859
+    prec_xo: 1.0000
+    rec_xo: 0.0135
+    f1_xo: 0.0267
+    acc_xsm: 0.5238
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 28:
+    acc_xo: 0.5000
+    prec_xo: 0.5000
+    rec_xo: 0.0164
+    f1_xo: 0.0317
+    acc_xsm: 0.4194
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 29:
+    acc_xo: 0.5760
+    prec_xo: 0.5760
+    rec_xo: 1.0000
+    f1_xo: 0.7310
+    acc_xsm: 0.5088
+    prec_xsm: 0.5088
+    rec_xsm: 1.0000
+    f1_xsm: 0.6744
+  Variable At Home Raw 30:
+    acc_xo: 0.4552
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4792
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 31:
+    acc_xo: 0.4706
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4068
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 32:
+    acc_xo: 0.5424
+    prec_xo: 0.5472
+    rec_xo: 0.9062
+    f1_xo: 0.6824
+    acc_xsm: 0.4500
+    prec_xsm: 0.4490
+    rec_xsm: 0.7857
+    f1_xsm: 0.5714
+  Variable At Home Raw 33:
+    acc_xo: 0.4621
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4894
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 34:
+    acc_xo: 0.4960
+    prec_xo: 0.5000
+    rec_xo: 0.0159
+    f1_xo: 0.0308
+    acc_xsm: 0.4444
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 35:
+    acc_xo: 0.4661
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4138
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 36:
+    acc_xo: 0.4113
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4902
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 37:
+    acc_xo: 0.4153
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.3571
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 38:
+    acc_xo: 0.4034
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4364
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 39:
+    acc_xo: 0.4035
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.3770
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 40:
+    acc_xo: 0.5917
+    prec_xo: 0.5917
+    rec_xo: 1.0000
+    f1_xo: 0.7435
+    acc_xsm: 0.5490
+    prec_xsm: 0.5490
+    rec_xsm: 1.0000
+    f1_xsm: 0.7089
+  Variable At Home Raw 41:
+    acc_xo: 0.6087
+    prec_xo: 0.6211
+    rec_xo: 0.8676
+    f1_xo: 0.7239
+    acc_xsm: 0.5370
+    prec_xsm: 0.5581
+    rec_xsm: 0.8000
+    f1_xsm: 0.6575
+  Variable At Home Raw 42:
+    acc_xo: 0.4643
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.3091
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 43:
+    acc_xo: 0.6147
+    prec_xo: 0.6147
+    rec_xo: 1.0000
+    f1_xo: 0.7614
+    acc_xsm: 0.5667
+    prec_xsm: 0.5667
+    rec_xsm: 1.0000
+    f1_xsm: 0.7234
+  Variable At Home Raw 44:
+    acc_xo: 0.6066
+    prec_xo: 0.6066
+    rec_xo: 1.0000
+    f1_xo: 0.7551
+    acc_xsm: 0.6667
+    prec_xsm: 0.6667
+    rec_xsm: 1.0000
+    f1_xsm: 0.8000
+  Variable At Home Raw 45:
+    acc_xo: 0.3590
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.3800
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 46:
+    acc_xo: 0.3363
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4118
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Home Raw 47:
+    acc_xo: 0.3393
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.4038
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 0:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 1:
+    acc_xo: 0.9333
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9818
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 2:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 3:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 4:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 5:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 6:
+    acc_xo: 0.0075
+    prec_xo: 0.0075
+    rec_xo: 1.0000
+    f1_xo: 0.0149
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 7:
+    acc_xo: 0.0079
+    prec_xo: 0.0079
+    rec_xo: 1.0000
+    f1_xo: 0.0156
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 8:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 9:
+    acc_xo: 0.1022
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0377
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 10:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 11:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 12:
+    acc_xo: 0.6636
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.8000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 13:
+    acc_xo: 0.3417
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.2653
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 14:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 15:
+    acc_xo: 0.0092
+    prec_xo: 0.0092
+    rec_xo: 1.0000
+    f1_xo: 0.0182
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 16:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0182
+    prec_xsm: 0.0182
+    rec_xsm: 1.0000
+    f1_xsm: 0.0357
+  Variable At Work Raw 17:
+    acc_xo: 0.0083
+    prec_xo: 0.0083
+    rec_xo: 1.0000
+    f1_xo: 0.0165
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 18:
+    acc_xo: 0.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.0179
+    prec_xsm: 0.0179
+    rec_xsm: 1.0000
+    f1_xsm: 0.0351
+  Variable At Work Raw 19:
+    acc_xo: 0.9919
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9828
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 20:
+    acc_xo: 0.9844
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 21:
+    acc_xo: 0.0150
+    prec_xo: 0.0150
+    rec_xo: 1.0000
+    f1_xo: 0.0296
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 22:
+    acc_xo: 0.0079
+    prec_xo: 0.0079
+    rec_xo: 1.0000
+    f1_xo: 0.0157
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 23:
+    acc_xo: 0.0076
+    prec_xo: 0.0076
+    rec_xo: 1.0000
+    f1_xo: 0.0152
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 24:
+    acc_xo: 0.0077
+    prec_xo: 0.0077
+    rec_xo: 1.0000
+    f1_xo: 0.0153
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 25:
+    acc_xo: 0.0076
+    prec_xo: 0.0076
+    rec_xo: 1.0000
+    f1_xo: 0.0152
+    acc_xsm: 0.0189
+    prec_xsm: 0.0189
+    rec_xsm: 1.0000
+    f1_xsm: 0.0370
+  Variable At Work Raw 26:
+    acc_xo: 0.0079
+    prec_xo: 0.0079
+    rec_xo: 1.0000
+    f1_xo: 0.0156
+    acc_xsm: 0.0175
+    prec_xsm: 0.0175
+    rec_xsm: 1.0000
+    f1_xsm: 0.0345
+  Variable At Work Raw 27:
+    acc_xo: 0.0154
+    prec_xo: 0.0154
+    rec_xo: 1.0000
+    f1_xo: 0.0303
+    acc_xsm: 0.0556
+    prec_xsm: 0.0556
+    rec_xsm: 1.0000
+    f1_xsm: 0.1053
+  Variable At Work Raw 28:
+    acc_xo: 0.8136
+    prec_xo: 0.0500
+    rec_xo: 0.2500
+    f1_xo: 0.0833
+    acc_xsm: 0.8333
+    prec_xsm: 0.1000
+    rec_xsm: 0.3333
+    f1_xsm: 0.1538
+  Variable At Work Raw 29:
+    acc_xo: 0.0391
+    prec_xo: 0.0391
+    rec_xo: 1.0000
+    f1_xo: 0.0752
+    acc_xsm: 0.0370
+    prec_xsm: 0.0370
+    rec_xsm: 1.0000
+    f1_xsm: 0.0714
+  Variable At Work Raw 30:
+    acc_xo: 0.9675
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9661
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 31:
+    acc_xo: 0.9760
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9811
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 32:
+    acc_xo: 0.9701
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 33:
+    acc_xo: 0.0231
+    prec_xo: 0.0231
+    rec_xo: 1.0000
+    f1_xo: 0.0451
+    acc_xsm: 0.0408
+    prec_xsm: 0.0408
+    rec_xsm: 1.0000
+    f1_xsm: 0.0784
+  Variable At Work Raw 34:
+    acc_xo: 0.2419
+    prec_xo: 0.0408
+    rec_xo: 1.0000
+    f1_xo: 0.0784
+    acc_xsm: 0.0727
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 35:
+    acc_xo: 0.0155
+    prec_xo: 0.0155
+    rec_xo: 1.0000
+    f1_xo: 0.0305
+    acc_xsm: 0.0213
+    prec_xsm: 0.0213
+    rec_xsm: 1.0000
+    f1_xsm: 0.0417
+  Variable At Work Raw 36:
+    acc_xo: 0.9918
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9623
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 37:
+    acc_xo: 0.0171
+    prec_xo: 0.0171
+    rec_xo: 1.0000
+    f1_xo: 0.0336
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 38:
+    acc_xo: 0.9919
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 39:
+    acc_xo: 0.0081
+    prec_xo: 0.0081
+    rec_xo: 1.0000
+    f1_xo: 0.0161
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 40:
+    acc_xo: 0.9912
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 41:
+    acc_xo: 0.9916
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 42:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9815
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 43:
+    acc_xo: 0.0086
+    prec_xo: 0.0086
+    rec_xo: 1.0000
+    f1_xo: 0.0171
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 44:
+    acc_xo: 0.9914
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 1.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 45:
+    acc_xo: 0.0087
+    prec_xo: 0.0087
+    rec_xo: 1.0000
+    f1_xo: 0.0172
+    acc_xsm: 0.0000
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 46:
+    acc_xo: 1.0000
+    prec_xo: 0.0000
+    rec_xo: 0.0000
+    f1_xo: 0.0000
+    acc_xsm: 0.9831
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000
+  Variable At Work Raw 47:
+    acc_xo: 0.0164
+    prec_xo: 0.0083
+    rec_xo: 1.0000
+    f1_xo: 0.0164
+    acc_xsm: 0.0238
+    prec_xsm: 0.0000
+    rec_xsm: 0.0000
+    f1_xsm: 0.0000

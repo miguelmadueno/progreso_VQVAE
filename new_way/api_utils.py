@@ -146,7 +146,8 @@ def partition_generator(
     # Replace invalid heart rate values (-1, -1.0) with NaN
     heart_rate_cols = ["heart_rate_hr_mean", "heart_rate_hr_min", "heart_rate_hr_max"]
     for col in heart_rate_cols:
-        df_[col] = df_[col].replace([-1, -1.0], np.nan)
+        if col in df_.columns:
+            df_[col] = df_[col].replace([-1, -1.0], np.nan)
     
     # Ensure that the date_time column is in datetime format
     df_['date_time'] = pd.to_datetime(df_['date_time'])
@@ -395,7 +396,7 @@ def calculate_class_weights(loaders, binary_indices, device):
     # Iterate over training and validation phases
     for phase in ['train', 'val']:
         for sample in loaders[phase]:
-            labels = sample['input']['signal_imp'].to(device).float()
+            labels = sample['input']['signal_imp'].to(device=device, dtype=torch.float32) #.to(device).float()
             mask = sample['input']['mask_signal'].to(device).float()
             for i, idx in enumerate(binary_indices):
                 # Select labels where mask is active (mask == 1)
@@ -728,6 +729,9 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
     model_losses_dir = os.path.join(checkpoint_path,"losses", name)
     os.makedirs(model_losses_dir, exist_ok=True)
 
+    model_track_dir = os.path.join(checkpoint_path,"model_track", name)
+    os.makedirs(model_track_dir, exist_ok=True)
+
     # Initialize TensorBoard writer
     writer = SummaryWriter(log_dir=model_losses_dir)
     losses_file_path = os.path.join(checkpoint_path,model_losses_dir, f"losses_{name}.txt")
@@ -812,8 +816,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                     optimizer.zero_grad()
 
                     # Retrieve inputs, labels, and mask from the sample
-                    inputs = sample['input']['signal_imp'].to(device).float()
-                    labels = sample['input']['signal'].to(device).float()
+                    inputs = sample['input']['signal_imp'].to(device=device, dtype=torch.float32)   #.to(device).float()
+                    labels = sample['input']['signal'].to(device=device, dtype=torch.float32) #.to(device).float()
                     mask = sample['input']['mask_signal'].to(device).float()
 
                     # Clone and modify mask for processing
@@ -1210,9 +1214,20 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
             print()
             f.write('\n')
 
+
+        train_losses_path = os.path.join(model_losses_dir, "train_losses.csv")
+        val_losses_path = os.path.join(model_losses_dir, "train_losses.csv")
+
+        col_names=['mean_reco_loss', 'mean_latent_loss', 'mean_loss']
+        df_val_losses=pd.DataFrame(val_losses, columns=col_names)
+        df_train_losses=pd.DataFrame(train_losses, columns=col_names)
+        df_val_losses.to_csv(val_losses_path, index=False)
+        df_train_losses.to_csv(train_losses_path, index=False)
+
         # Log final epoch performance
         print(f'Model in last {str(last_epochs).ljust(2)} epochs  [val]   <loss> reco: {val_losses[-last_epochs:, 0].mean():.4f} | latent: {val_losses[-last_epochs:, 1].mean():4f} | overall: {val_losses[-last_epochs:, 2].mean():.4f}\n')
         f.write(f'Model in last {str(last_epochs).ljust(2)} epochs  [val]   <loss> reco: {val_losses[-last_epochs:, 0].mean():.4f} | latent: {val_losses[-last_epochs:, 1].mean():4f} | overall: {val_losses[-last_epochs:, 2].mean():.4f}\n')
+
 
     # Load the best model weights
     model.load_state_dict(best_model_weights)
@@ -1242,8 +1257,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
     
     for sample in loaders['test']:
 
-        inputs = sample['input']['signal_imp'].to(device).float()
-        labels = sample['input']['signal'].to(device).float()
+        inputs = sample['input']['signal_imp'].to(device=device, dtype=torch.float32) #.to(device).float()
+        labels = sample['input']['signal'].to(device=device, dtype=torch.float32) #.to(device).float()
         mask = sample['input']['mask_signal'].to(device).float()
 
         mask_ = mask.clone()

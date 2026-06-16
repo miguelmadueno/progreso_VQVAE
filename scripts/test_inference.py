@@ -17,7 +17,7 @@ def main():
     # data_path = r"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a0/train01/data_partitions/test.csv"
     # results_folder_path = r"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a0/train01/results"
     
-    base_path = r"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/cpd/a2/train03/"
+    base_path = r'/Users/mmsanz/Desktop/Miguel/eB2/progreso_VQVAE/scripts/model/'
 
     base_path = os.path.abspath(base_path)
     model_matches = glob.glob(os.path.join(base_path, "*_m_best.pt"))
@@ -30,16 +30,15 @@ def main():
     with open(config_matches[0], "r") as f:
         hyperparameters = json.load(f)
 
-    inference = vqvae_inference(model_route=model_route, device="cuda", 
+    inference = vqvae_inference(model_route=model_route, device='mps', 
                                 hyperparameters = hyperparameters
                                 )
 
-    inference.forward_cpd(
-        data_path=
-        #data_path,
-        r"/export/usuarios01/icmora/deploymentVQVAE/deployment-VQVAE/trainings/data/df_eb2_allvariables_suicide.csv",
+    df_grouped=inference.forward(
+        data_path=data_path,
         results_folder_path=results_folder_path,
     )
+    print(df_grouped.head())
 
 if __name__ == "__main__":
     main()
