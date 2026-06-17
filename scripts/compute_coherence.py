@@ -65,7 +65,7 @@ def main():
     data_path2 = 'scripts/model/data_partitions/validation.csv' 
 
     num_t=range(2,15,2)
-    n_iterations = 20
+    n_iterations = 10
     rows_to_select = 100
 
     metrics_dict={}
