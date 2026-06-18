@@ -648,8 +648,14 @@ class DailyPatientSummaryDataset(Dataset):
                     )
 
                     if remaining:
+                        modes = sample[remaining].mode()
+                        if not modes.empty:
+                            new_sample[remaining] = modes.iloc[0]
+                        else:
+                            new_sample[remaining] = np.nan
+
                         # Fill remaining columns with mode (most frequent) values
-                        new_sample[remaining] = sample[remaining].mode().iloc[0]
+                        #new_sample[remaining] = sample[remaining].mode().iloc[0]
 
                     # Merge to ensure all dates are present
                     sample = sample.merge(new_sample, "outer").sort_values(by="date_time")

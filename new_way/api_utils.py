@@ -778,6 +778,8 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
         epoch_aggregated_xom = np.zeros((num_epochs, n_feats))
         epoch_aggregated_xsm = np.zeros((num_epochs, n_feats))
         
+        target_epochs=[1,10,25,50,75,100,125,150,175,200]
+
         for epoch in range(num_epochs):
             f.write(f'\nEpoch {epoch+1}/{num_epochs}\n')
             print(f'\nEpoch {epoch+1}/{num_epochs}\n')
@@ -1063,6 +1065,11 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
                     val_losses_per_var_list.append(mean_reco_loss_per_var)
                     val_losses_xsm_per_var_list.append(mean_reco_loss_xsm_per_var)
 
+                    epoch_one_based=epoch+1
+                    if epoch_one_based in target_epochs:
+                        current_weights=copy.deepcopy(model.state_dict())
+                        torch.save(current_weights, os.path.join(model_track_dir, f'model_epoch_{epoch_one_based}.pt'))
+                
                 # Aggregate mask counts
                 epoch_aggregated_xo[epoch, :] = epoch_xo / batch_count
                 epoch_aggregated_xom[epoch, :] = epoch_xom / batch_count
@@ -1216,7 +1223,7 @@ def train_vqvae(model, loaders, optimizer, scheduler, device, name, latent_weigh
 
 
         train_losses_path = os.path.join(model_losses_dir, "train_losses.csv")
-        val_losses_path = os.path.join(model_losses_dir, "train_losses.csv")
+        val_losses_path = os.path.join(model_losses_dir, "val_losses.csv")
 
         col_names=['mean_reco_loss', 'mean_latent_loss', 'mean_loss']
         df_val_losses=pd.DataFrame(val_losses, columns=col_names)

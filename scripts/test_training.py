@@ -34,7 +34,7 @@ def main():
         "train_batch_size": 128,
         "val_batch_size": 128,
         "test_batch_size": 64,
-        "num_workers": 8,
+        "num_workers": 0,#8,
         "test_num_workers": 0,
 
         # Model
@@ -56,7 +56,7 @@ def main():
         "valid_percentage": 0.15,
 
         # Training
-        "num_epochs_vqvae": 2, #5000,
+        "num_epochs_vqvae": 200, #5000,
         "step_size_vqvae": 150,
         "gamma_vqvae": 1,
         "lr_vqvae": 0.0001,
