@@ -30,3 +30,11 @@ print(type(data))
 
 
 # %%
+import time
+from tqdm import tqdm
+
+# Just wrap your range() or list with tqdm()
+for i in tqdm(range(200), desc="Processing data"):
+    time.sleep(0.05)  # Simulating some heavy computation here
+
+# %%

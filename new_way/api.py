@@ -164,10 +164,11 @@ class vqvae_inference():
         self.model.to(self.device)
         print("Model successfully loaded")
     
-    def forward(self, data_path: str,results_folder_path:str):
+    def forward(self, data_path: str,results_folder_path:str,return_embed=False):
 
         """
         Handles the data
+        return_embed argument includes the matrix of embeddings in the output when set to True.
         """
         
         self.model.to(self.device)
@@ -283,7 +284,10 @@ class vqvae_inference():
 
         print(f"Dataset saved to: {output_file}")
 
-        return df_grouped
+        if return_embed:
+            return df_grouped, self.model.quantizer.embed
+        else:
+            return df_grouped
 
     def forward_cpd(self, data_path: str,results_folder_path:str):
 
